@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — FRAGMNT</title>
+<script src="shared.js"></script>
+<style>
+  :root{
+    --ink:#0b0b0c;
+    --bone:#e9e9e4;
+    --ash:#9a9a95;
+    --ash-dim:#6b6b67;
+    --line:rgba(255,255,255,.12);
+    --line-strong:rgba(255,255,255,.22);
+    --decoy-fill:rgba(255,255,255,.06);
+    --decoy-border:rgba(255,255,255,.28);
+    --us-bg:rgba(255,255,255,.07);
+    --mono:ui-monospace,"SF Mono","JetBrains Mono","Roboto Mono",Menlo,Consolas,monospace;
+  }
+
+  .page-hero{padding:10rem 3rem 4rem;max-width:1100px;margin:0 auto;}
+  .page-hero h1{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:600;letter-spacing:-0.03em;color:#fff;line-height:1.05;margin-bottom:1rem;}
+  .page-hero p{font-size:1.05rem;color:#888;max-width:480px;line-height:1.8;}
+
+  /* ── RATE SHEET ── */
+  .rate-section{max-width:1100px;margin:0 auto;padding:3rem 3rem 5rem;}
+
+  .sheet-inner{border:1px solid var(--line);background:var(--ink);overflow:hidden;border-radius:8px;position:relative;}
+  .sheet-inner::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,transparent 0%,rgba(255,255,255,.055) 49.5%,rgba(255,255,255,.11) 50%,rgba(255,255,255,.055) 50.5%,transparent 100%);background-size:100% 200%;background-position:0 -100%;animation:scan 1.6s cubic-bezier(.4,0,.6,1) .3s forwards;z-index:10;}
+  @keyframes scan{0%{background-position:0 -100%}100%{background-position:0 200%}}
+
+  .sheet-head{background:#000;padding:2.5rem 3rem;border-bottom:1px solid var(--line-strong);display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;flex-wrap:wrap;}
+  .sheet-eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--ash);margin-bottom:1rem;display:flex;align-items:center;gap:10px;}
+  .sheet-wordmark{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:800;letter-spacing:-0.038em;line-height:.88;text-transform:uppercase;color:#fff;}
+  .sheet-tagline{font-family:var(--mono);font-size:clamp(9px,1.4vw,11px);letter-spacing:.13em;text-transform:uppercase;color:var(--bone);margin-top:1.1rem;}
+  .sheet-meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;text-align:right;color:var(--ash);line-height:2;}
+  .sheet-meta b{color:#fff;font-weight:700;}
+
+  .sec-label{display:flex;align-items:center;gap:14px;padding:2rem 3rem 6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--ash);}
+  .sec-label .ln{flex:1;height:1px;background:var(--line);}
+
+  .rate-list{padding:0 3rem 1.5rem;}
+  .rate-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:1.5rem;padding:clamp(18px,3vw,26px) 0;border-top:1px solid var(--line);position:relative;transition:background .18s;}
+  .rate-row:first-child{border-top:none;}
+  .rate-row:hover{background:rgba(255,255,255,.025);margin:0 -3rem;padding-left:3rem;padding-right:3rem;}
+  .rate-row.decoy{background:var(--decoy-fill);border:1px solid var(--decoy-border);border-radius:2px;margin:0.6rem -3rem;padding-left:3rem;padding-right:3rem;}
+  .rate-row.decoy:hover{background:rgba(255,255,255,.09);}
+  .decoy-tag{position:absolute;top:-1px;right:0;font-family:var(--mono);font-size:9px;letter-spacing:.24em;text-transform:uppercase;background:#fff;color:#000;padding:3px 8px;font-weight:700;}
+  .rate-cat{font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--ash-dim);margin-bottom:7px;}
+  .rate-name{font-size:clamp(18px,3.2vw,24px);font-weight:700;letter-spacing:-.015em;color:#fff;}
+  .rate-desc{font-size:13.5px;color:var(--ash);margin-top:5px;max-width:44ch;}
+  .rate-price{font-family:var(--mono);font-size:clamp(20px,4vw,32px);font-weight:600;letter-spacing:-.015em;white-space:nowrap;text-align:right;color:#fff;}
+  .rate-row.decoy .rate-price{font-size:clamp(24px,4.8vw,38px);font-weight:700;}
+  .rate-unit{display:block;font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ash);margin-top:6px;}
+
+  .promise-strip{margin-top:1rem;border-top:1px solid var(--line-strong);background:rgba(255,255,255,.03);display:grid;grid-template-columns:repeat(2,1fr);}
+  .promise-item{padding:1.5rem 2rem;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--bone);border-left:1px solid var(--line);line-height:1.75;}
+  .promise-item:first-child{border-left:none;}
+  .promise-item b{color:#fff;font-weight:700;}
+
+  .sheet-foot{padding:1.1rem 3rem;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);}
+  .sheet-foot b{color:#fff;font-weight:700;}
+
+  /* ── COMPARISON TABLE ── */
+  .compare-section{max-width:1100px;margin:0 auto;padding:2rem 3rem 6rem;}
+
+  .compare-inner{border:1px solid var(--line);background:var(--ink);border-radius:8px;overflow:hidden;position:relative;}
+  .compare-inner::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,transparent 0%,rgba(255,255,255,.055) 49.5%,rgba(255,255,255,.11) 50%,rgba(255,255,255,.055) 50.5%,transparent 100%);background-size:100% 200%;background-position:0 -100%;animation:scan2 1.6s cubic-bezier(.4,0,.6,1) .6s forwards;z-index:10;}
+  @keyframes scan2{0%{background-position:0 -100%}100%{background-position:0 200%}}
+
+  .compare-head{background:#000;padding:2.5rem 3rem;border-bottom:1px solid var(--line-strong);display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;flex-wrap:wrap;}
+  .compare-sub{font-size:clamp(14px,2.5vw,18px);font-weight:600;letter-spacing:-.015em;color:var(--bone);padding:1rem 3rem 0.5rem;max-width:56ch;}
+
+  .table-wrap{padding:0 3rem;}
+  table{width:100%;border-collapse:collapse;}
+  thead th{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);font-weight:500;text-align:right;padding:0 16px 16px;vertical-align:bottom;}
+  thead th.svc{text-align:left;padding-left:0;}
+  thead th.us{color:#fff;font-weight:700;letter-spacing:.15em;background:var(--us-bg);border-top:2px solid #fff;border-left:1px solid var(--line-strong);border-right:1px solid var(--line-strong);padding-top:14px;}
+  tbody td{padding:clamp(14px,2.5vw,20px) 16px;border-top:1px solid var(--line);text-align:right;vertical-align:middle;font-family:var(--mono);font-size:clamp(12px,2.2vw,15px);color:var(--ash);white-space:nowrap;}
+  tbody td.svc{text-align:left;padding-left:0;font-family:'Space Grotesk',sans-serif;font-size:clamp(14px,2.5vw,18px);font-weight:700;letter-spacing:-.015em;color:#fff;white-space:normal;}
+  tbody td.us{background:var(--us-bg);border-left:1px solid var(--line-strong);border-right:1px solid var(--line-strong);color:#fff;font-weight:700;font-size:clamp(14px,2.5vw,18px);}
+  tbody tr:last-child td.us{border-bottom:2px solid #fff;}
+  tbody td.save{color:var(--bone);font-size:clamp(12px,2vw,14px);}
+  tbody td.save b{display:block;color:#fff;font-weight:700;font-size:clamp(16px,3vw,21px);letter-spacing:-.01em;margin-bottom:2px;}
+  tbody td.save .lab{display:block;font-size:9px;letter-spacing:.2em;color:var(--ash-dim);text-transform:uppercase;}
+  tbody tr{transition:background .15s;}
+  tbody tr:hover td{background:rgba(255,255,255,.025);}
+  tbody tr:hover td.us{background:rgba(255,255,255,.1);}
+  .bar-wrap{margin-top:6px;height:2px;background:rgba(255,255,255,.1);border-radius:1px;overflow:hidden;width:60px;margin-left:auto;}
+  .bar-fill{height:100%;background:#fff;border-radius:1px;width:0;transition:width 1s cubic-bezier(.4,0,.2,1);}
+
+  .caveat{padding:1.25rem 3rem 0.6rem;font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--ash-dim);line-height:1.75;text-transform:uppercase;}
+
+  @media(max-width:768px){
+    .page-hero{padding:8rem 1.5rem 3rem;}
+    .rate-section,.compare-section{padding:2rem 1.5rem 4rem;}
+    .sheet-head,.compare-head{padding:2rem 1.5rem;}
+    .sec-label,.rate-list,.table-wrap,.caveat,.sheet-foot{padding-left:1.5rem;padding-right:1.5rem;}
+    .rate-row:hover,.rate-row.decoy{margin-left:-1.5rem;margin-right:-1.5rem;padding-left:1.5rem;padding-right:1.5rem;}
+    .promise-strip{grid-template-columns:1fr;}
+    .promise-item{border-left:none;border-top:1px solid var(--line);}
+    .promise-item:first-child{border-top:none;}
+    .compare-sub{padding-left:1.5rem;padding-right:1.5rem;}
+    thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+    table,tbody,tr,td{display:block;width:100%;}
+    tbody tr{border-top:1px solid var(--line-strong);padding:8px 0 12px;}
+    tbody tr:first-child{border-top:none;}
+    tbody td{border-top:none;text-align:right;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:8px 0;}
+    tbody td.svc{display:block;padding:10px 0 6px;border-bottom:1px solid var(--line);}
+    tbody td::before{content:attr(data-label);font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ash);font-weight:500;}
+    tbody td.us,tbody tr:hover td.us{background:none;border:none;}
+    .bar-wrap{display:none;}
+    .sheet-meta,.compare-head .sheet-meta{text-align:left;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .sheet-inner::after,.compare-inner::after{display:none;}
+    .bar-fill{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-hero">
+  <p class="section-label">Transparent pricing</p>
+  <h1>Rates &<br>Comparison</h1>
+  <p>No hidden fees, no markups on parts. Just honest labor rates from people who actually know what they're doing.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- RATE SHEET -->
+<div class="rate-section">
+  <p class="section-label" style="margin-bottom:1.5rem;">Rate sheet</p>
+  <div class="sheet-inner">
+    <div class="sheet-head">
+      <div>
+        <div class="sheet-eyebrow"><span style="color:var(--ash-dim)">+</span> PC Services — NYC</div>
+        <div class="sheet-wordmark">FRAGMNT</div>
+        <div class="sheet-tagline">Expert Builds · Repairs · Cleaning · Diagnostics</div>
+      </div>
+      <div class="sheet-meta"><b>FRAGMNT.NYC</b><br>Rate Sheet<br>New York City — 2026</div>
+    </div>
+
+    <div class="sec-label"><span>Service Menu</span><span class="ln"></span><span>Labor Rates</span></div>
+
+    <div class="rate-list">
+      <div class="rate-row">
+        <div>
+          <div class="rate-cat">Build</div>
+          <div class="rate-name">Custom PC Build</div>
+          <div class="rate-desc">Full assembly, labor only — we source the parts, no markup.</div>
+        </div>
+        <div class="rate-price">$80–$200</div>
+      </div>
+      <div class="rate-row">
+        <div>
+          <div class="rate-cat">Repair</div>
+          <div class="rate-name">Repairs & Rebuilds</div>
+          <div class="rate-desc">Diagnose, fix, or rebuild an existing system.</div>
+        </div>
+        <div class="rate-price">$55–$75<span class="rate-unit">per hour</span></div>
+      </div>
+      <div class="rate-row">
+        <div>
+          <div class="rate-cat">Care</div>
+          <div class="rate-name">PC Cleaning</div>
+          <div class="rate-desc">Basic dusting or a full internal deep clean.</div>
+        </div>
+        <div class="rate-price">$40–$100</div>
+      </div>
+      <div class="rate-row">
+        <div>
+          <div class="rate-cat">Diagnostic</div>
+          <div class="rate-name">Diagnostics</div>
+          <div class="rate-desc">Quick check or a full written system report.</div>
+        </div>
+        <div class="rate-price">$30–$75</div>
+      </div>
+      <div class="rate-row decoy">
+        <span class="decoy-tag">Most Booked</span>
+        <div>
+          <div class="rate-cat">Bundle</div>
+          <div class="rate-name">Tune-Up Bundle</div>
+          <div class="rate-desc">Full cleaning plus diagnostics — one flat price, no surprises.</div>
+        </div>
+        <div class="rate-price">$80<span class="rate-unit">flat</span></div>
+      </div>
+      <div class="rate-row">
+        <div>
+          <div class="rate-cat">Advisory</div>
+          <div class="rate-name">Consultation</div>
+          <div class="rate-desc">Parts advice, build planning, and second opinions.</div>
+        </div>
+        <div class="rate-price">$25–$50<span class="rate-unit">per hour</span></div>
+      </div>
+    </div>
+
+    <div class="promise-strip">
+      <div class="promise-item"><b>Transparent pricing.</b><br>No hidden fees, ever.</div>
+      <div class="promise-item"><b>You buy the parts.</b><br>We never mark them up.</div>
+    </div>
+
+    <div class="sheet-foot">
+      <span>Book — <b>FRAGMNT.NYC</b></span>
+      <span>New York City</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- COMPARISON TABLE -->
+<div class="compare-section">
+  <p class="section-label" style="margin-bottom:1.5rem;">How we compare</p>
+  <div class="compare-inner">
+    <div class="compare-head">
+      <div>
+        <div class="sheet-eyebrow"><span style="color:var(--ash-dim)">+</span> Price Comparison — NYC</div>
+        <div class="sheet-wordmark">FRAGMNT</div>
+        <div class="sheet-tagline">Expert Builds · Repairs · Cleaning · Diagnostics</div>
+      </div>
+      <div class="sheet-meta"><b>FRAGMNT.NYC</b><br>How We Compare<br>New York City — 2026</div>
+    </div>
+
+    <div class="sec-label"><span>Market Rate</span><span class="ln"></span><span>vs. Us</span></div>
+    <p class="compare-sub">Same parts. Same work. A fraction of the labor cost.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="svc">Service</th>
+            <th>Geek Squad</th>
+            <th>Micro Center</th>
+            <th class="us">FRAGMNT</th>
+            <th class="save">You Save</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="svc">Diagnostics</td>
+            <td data-label="Geek Squad">$99–$150</td>
+            <td data-label="Micro Center">$50–$80</td>
+            <td class="us" data-label="FRAGMNT">$30–$75</td>
+            <td class="save" data-label="You Save"><b>80%</b><span class="lab">up to</span><div class="bar-wrap"><div class="bar-fill" data-pct="80"></div></div></td>
+          </tr>
+          <tr>
+            <td class="svc">PC Cleaning</td>
+            <td data-label="Geek Squad">$80–$150</td>
+            <td data-label="Micro Center">$60–$120</td>
+            <td class="us" data-label="FRAGMNT">$40–$100</td>
+            <td class="save" data-label="You Save"><b>50%</b><span class="lab">up to</span><div class="bar-wrap"><div class="bar-fill" data-pct="50"></div></div></td>
+          </tr>
+          <tr>
+            <td class="svc">Custom PC Build</td>
+            <td data-label="Geek Squad">$300+</td>
+            <td data-label="Micro Center">$250+</td>
+            <td class="us" data-label="FRAGMNT">$80–$200</td>
+            <td class="save" data-label="You Save"><b>73%</b><span class="lab">up to</span><div class="bar-wrap"><div class="bar-fill" data-pct="73"></div></div></td>
+          </tr>
+          <tr>
+            <td class="svc">Repairs <span style="font-weight:400;color:var(--ash)">/hr</span></td>
+            <td data-label="Geek Squad">$100/hr</td>
+            <td data-label="Micro Center">$80–$100/hr</td>
+            <td class="us" data-label="FRAGMNT">$55–$75/hr</td>
+            <td class="save" data-label="You Save"><b>45%</b><span class="lab">up to</span><div class="bar-wrap"><div class="bar-fill" data-pct="45"></div></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="caveat">Competitor rates based on published 2026 NYC-area pricing. Actual cost varies by scope and complexity. You always source your own parts — we never mark them up.</p>
+
+    <div class="sheet-foot">
+      <span>Book — <b>FRAGMNT.NYC</b></span>
+      <span>New York City</span>
+    </div>
+  </div>
+</div>
+
+<script>
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(b => {
+      b.style.width = b.dataset.pct + '%';
+    });
+  }, 600);
+});
+injectShared('pricing.html');
+</script>
+</body>
+</html>
