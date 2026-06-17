@@ -3,124 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About — FRAGMNT</title>
+<title>Contact — FRAGMNT</title>
 <script src="shared.js" defer></script>
 <style>
   .page-hero{padding:10rem 3rem 4rem;max-width:1100px;margin:0 auto;}
   .page-hero h1{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:600;letter-spacing:-0.03em;color:#fff;line-height:1.05;margin-bottom:1rem;}
-  .page-hero p{font-size:1.05rem;color:#888;max-width:520px;line-height:1.8;}
+  .page-hero p{font-size:1.05rem;color:#888;max-width:480px;line-height:1.8;}
 
-  .story-section{max-width:1100px;margin:0 auto;padding:4rem 3rem;}
-  .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
-  .story-body p{font-size:0.95rem;color:#aaa;line-height:1.9;margin-bottom:1.25rem;}
-  .story-body p strong{color:#fff;font-weight:600;}
+  .contact-section{max-width:1100px;margin:0 auto;padding:3rem 3rem 8rem;}
+  .contact-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:5rem;align-items:start;}
 
-  .team-section{max-width:1100px;margin:0 auto;padding:4rem 3rem 6rem;}
-  .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;}
-  .team-card{background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:2rem;transition:border-color 0.2s;}
-  .team-card:hover{border-color:rgba(255,255,255,0.18);}
-  .team-avatar{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:0.85rem;font-weight:700;color:#fff;margin-bottom:1.25rem;letter-spacing:0.05em;}
-  .team-name{font-size:1rem;font-weight:600;color:#fff;margin-bottom:0.3rem;}
-  .team-role{font-size:0.75rem;font-family:'Space Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;color:#888;margin-bottom:1rem;}
-  .team-bio{font-size:0.85rem;color:#888;line-height:1.7;margin-bottom:1.25rem;}
-  .team-email{font-size:0.8rem;color:#888;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:0.1rem;transition:color 0.2s,border-color 0.2s;}
-  .team-email:hover{color:#fff;border-color:rgba(255,255,255,0.4);}
+  .contact-info-block{display:flex;flex-direction:column;gap:2rem;}
+  .contact-detail-group{}
+  .contact-detail-label{font-family:'Space Mono',monospace;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:#555;margin-bottom:0.5rem;}
+  .contact-detail-value{font-size:0.9rem;color:#aaa;line-height:1.7;}
+  .contact-detail-value a{color:#aaa;text-decoration:none;transition:color 0.2s;}
+  .contact-detail-value a:hover{color:#fff;}
 
-  .values-section{max-width:1100px;margin:0 auto;padding:4rem 3rem 6rem;}
-  .values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2.5rem;}
-  .value-item{}
-  .value-num{font-family:'Space Mono',monospace;font-size:0.7rem;color:#555;letter-spacing:0.15em;margin-bottom:0.75rem;}
-  .value-heading{font-size:1rem;font-weight:600;color:#fff;margin-bottom:0.5rem;}
-  .value-body{font-size:0.875rem;color:#888;line-height:1.7;}
+  .contact-form{display:flex;flex-direction:column;gap:1.25rem;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .form-group{display:flex;flex-direction:column;gap:0.4rem;}
+  .form-group label{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:#888;}
+  .form-group input,.form-group textarea,.form-group select{background:#111;border:1px solid rgba(255,255,255,0.12);border-radius:4px;color:#fff;padding:0.75rem 1rem;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s;width:100%;}
+  .form-group input::placeholder,.form-group textarea::placeholder{color:#555;}
+  .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:rgba(255,255,255,0.35);}
+  .form-group textarea{resize:vertical;min-height:130px;}
+  .form-group select option{background:#111;}
+  .form-submit{background:#fff;color:#000;border:none;padding:0.9rem;border-radius:4px;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:opacity 0.2s;}
+  .form-submit:hover{opacity:0.85;}
+  .form-success{display:none;background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:1.5rem;text-align:center;color:#888;font-size:0.9rem;line-height:1.6;}
+  .form-success strong{color:#fff;display:block;margin-bottom:0.4rem;}
 
   @media(max-width:768px){
     .page-hero{padding:8rem 1.5rem 3rem;}
-    .story-section{padding:3rem 1.5rem;}
-    .story-grid{grid-template-columns:1fr;gap:2.5rem;}
-    .team-section,.values-section{padding:3rem 1.5rem 5rem;}
+    .contact-section{padding:2rem 1.5rem 6rem;}
+    .contact-grid{grid-template-columns:1fr;gap:3rem;}
+    .form-row{grid-template-columns:1fr;}
   }
 </style>
 </head>
 <body>
 
 <div class="page-hero">
-  <p class="section-label">Who we are</p>
-  <h1>Built in NYC.<br>Built for real.</h1>
-  <p>Fragmnt is a NYC-based PC services operation run by two people who actually know their way around a build.</p>
+  <p class="section-label">Reach out</p>
+  <h1>Let's talk<br>about your PC.</h1>
+  <p>Send a message and we'll get back to you within 24 hours. Not sure what you need? That's fine — just describe what's going on.</p>
 </div>
 
 <div class="divider"></div>
 
-<div class="story-section">
-  <div class="story-grid">
+<div class="contact-section">
+  <div class="contact-grid">
+
+    <div class="contact-info-block">
+      <div class="contact-detail-group">
+        <p class="contact-detail-label">General inquiries</p>
+        <div class="contact-detail-value">
+          <a href="mailto:fragmntnyc@gmail.com">fragmntnyc@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-detail-group">
+        <p class="contact-detail-label">Maximus Bhuiyan</p>
+        <div class="contact-detail-value">
+          <a href="mailto:maximus.bhuiyan06@gmail.com">maximus.bhuiyan06@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-detail-group">
+        <p class="contact-detail-label">Jun</p>
+        <div class="contact-detail-value">
+          <a href="mailto:jun0yed.business@gmail.com">jun0yed.business@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-detail-group">
+        <p class="contact-detail-label">Location</p>
+        <div class="contact-detail-value">New York City, NY<br>In-person service only</div>
+      </div>
+      <div class="contact-detail-group">
+        <p class="contact-detail-label">Instagram</p>
+        <div class="contact-detail-value">
+          <a href="https://www.instagram.com/fragmnt.nyc/" target="_blank">@fragmnt.nyc ↗</a>
+        </div>
+      </div>
+      <div class="contact-detail-group">
+        <p class="contact-detail-label">Response time</p>
+        <div class="contact-detail-value">Within 24 hours</div>
+      </div>
+    </div>
+
     <div>
-      <p class="section-label">Our story</p>
-      <h2 class="section-title">No big box stores.<br>Just us.</h2>
+      <form class="contact-form" id="contactForm" onsubmit="submitForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First name</label>
+            <input type="text" placeholder="First" required>
+          </div>
+          <div class="form-group">
+            <label>Last name</label>
+            <input type="text" placeholder="Last">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Service you're interested in</label>
+          <select>
+            <option value="">Select a service</option>
+            <option>Custom PC Build</option>
+            <option>Repairs &amp; Rebuild</option>
+            <option>Diagnostics</option>
+            <option>PC Cleaning</option>
+            <option>Consultation</option>
+            <option>Tune-Up Bundle</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Tell us what's going on with your PC, what you're looking to build, or any questions you have..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send message</button>
+      </form>
+      <div class="form-success" id="formSuccess">
+        <strong>Message sent.</strong>
+        We'll be in touch within 24 hours at the email you provided.
+      </div>
     </div>
-    <div class="story-body">
-      <p>Fragmnt started because we got tired of watching people overpay for mediocre service at places that treat your PC like a number in a queue.</p>
-      <p>We've diagnosed PSU failures under load, tracked down BSODs nobody else could explain, and built custom rigs from scratch — <strong>hands-on experience, not textbook knowledge.</strong></p>
-      <p>Based in New York City, we work with clients directly — no shipping, no middle layer, no mystery charges. You know what you're paying, what we're doing, and why.</p>
-      <p>Whether you need a full custom build, a PC that's acting up, or just someone to talk you through a parts list — <strong>we're the call.</strong></p>
-    </div>
+
   </div>
 </div>
 
-<div class="divider"></div>
-
-<div class="team-section">
-  <p class="section-label">The team</p>
-  <h2 class="section-title">Who you're working with</h2>
-  <div class="team-grid">
-
-    <div class="team-card">
-      <div class="team-avatar">MB</div>
-      <p class="team-name">Maximus Bhuiyan</p>
-      <p class="team-role">Co-founder · Lead Technician</p>
-      <p class="team-bio">Hands-on experience in PC building, repair, and diagnostics — from PSU failures to full system rebuilds. Also studying engineering at CUNY Queens College in the Columbia 3-2 program.</p>
-      <a href="mailto:maximus.bhuiyan06@gmail.com" class="team-email">maximus.bhuiyan06@gmail.com</a>
-    </div>
-
-    <div class="team-card">
-      <div class="team-avatar">J</div>
-      <p class="team-name">Jun</p>
-      <p class="team-role">Co-founder</p>
-      <p class="team-bio">Co-founder and partner at Fragmnt, helping build the business from the ground up in New York City.</p>
-      <a href="mailto:jun0yed.business@gmail.com" class="team-email">jun0yed.business@gmail.com</a>
-    </div>
-
-  </div>
-</div>
-
-<div class="divider"></div>
-
-<div class="values-section">
-  <p class="section-label">How we operate</p>
-  <h2 class="section-title">What makes us different</h2>
-  <div class="values-grid">
-    <div class="value-item">
-      <p class="value-num">01</p>
-      <p class="value-heading">Real experience</p>
-      <p class="value-body">We've diagnosed and repaired real machines — PSU failures, GPU crashes, BSODs, full rebuilds. Not theory. Actual work.</p>
-    </div>
-    <div class="value-item">
-      <p class="value-num">02</p>
-      <p class="value-heading">Transparent pricing</p>
-      <p class="value-body">You know what you're paying before we touch anything. No hidden fees, no surprise invoices at the end.</p>
-    </div>
-    <div class="value-item">
-      <p class="value-num">03</p>
-      <p class="value-heading">Local to NYC</p>
-      <p class="value-body">In-person service only. We're not shipping your rig anywhere — you deal with us directly, start to finish.</p>
-    </div>
-    <div class="value-item">
-      <p class="value-num">04</p>
-      <p class="value-heading">You own the parts</p>
-      <p class="value-body">For builds, we source the components. We handle assembly and setup — and you stay in control of your budget.</p>
-    </div>
-  </div>
-</div>
-
-<script>injectShared('about.html');</script>
+<script>
+function submitForm(e) {
+  e.preventDefault();
+  document.getElementById('contactForm').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+}
+injectShared('contact.html');
+</script>
 </body>
 </html>
