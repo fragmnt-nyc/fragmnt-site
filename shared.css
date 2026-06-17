@@ -1,28 +1,5 @@
-const NAV_HTML = `
-<nav>
-  <a href="index.html" class="nav-logo">FRAGMNT</a>
-  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">&#9776;</button>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="services.html">Services</a></li>
-    <li><a href="pricing.html">Pricing</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <li><a href="book.html" class="nav-cta">Book Now</a></li>
-  </ul>
-</nav>`;
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
-const FOOTER_HTML = `
-<div class="divider"></div>
-<footer>
-  <span class="footer-logo">FRAGMNT</span>
-  <div style="display:flex;align-items:center;gap:1.5rem;">
-    <a href="https://www.instagram.com/fragmnt.nyc/" target="_blank" class="footer-link">@fragmnt.nyc ↗</a>
-    <span class="footer-copy">© 2026 Fragmnt · New York City</span>
-  </div>
-</footer>`;
-
-const SHARED_CSS = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --black:#080808;
@@ -69,33 +46,4 @@ footer{display:flex;align-items:center;justify-content:space-between;max-width:1
   .nav-links.open{display:flex;}
   .nav-hamburger{display:block;}
   footer{flex-direction:column;gap:1rem;text-align:center;padding:2rem 1.5rem;}
-}
-`;
-
-function injectShared(activePage) {
-  // Inject Google Fonts
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap';
-  document.head.appendChild(link);
-
-  // Inject shared CSS
-  const style = document.createElement('style');
-  style.textContent = SHARED_CSS;
-  document.head.appendChild(style);
-
-  // Inject nav
-  document.body.insertAdjacentHTML('afterbegin', NAV_HTML);
-
-  // Inject footer
-  document.body.insertAdjacentHTML('beforeend', FOOTER_HTML);
-
-  // Set active nav link
-  document.querySelectorAll('.nav-links a').forEach(a => {
-    if (a.getAttribute('href') === activePage) a.classList.add('active');
-  });
-}
-
-function toggleMenu() {
-  document.getElementById('navLinks').classList.toggle('open');
 }
