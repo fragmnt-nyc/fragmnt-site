@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FRAGMNT — PC Services NYC</title>
+<script src="shared.js"></script>
+<style>
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 3rem 4rem;position:relative;overflow:hidden;}
+  .hero::before{content:'FRAGMNT';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Space Mono',monospace;font-size:clamp(5rem,16vw,17rem);font-weight:700;letter-spacing:-0.02em;color:rgba(255,255,255,0.025);white-space:nowrap;pointer-events:none;user-select:none;}
+  .hero-eyebrow{font-family:'Space Mono',monospace;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:#888;margin-bottom:1.5rem;}
+  .hero h1{font-size:clamp(2.8rem,6vw,5.5rem);font-weight:600;line-height:1.05;letter-spacing:-0.03em;color:#fff;max-width:700px;margin-bottom:1.5rem;}
+  .hero h1 em{font-style:normal;color:#888;}
+  .hero-sub{font-size:1.05rem;color:#888;max-width:420px;margin-bottom:2.5rem;line-height:1.7;}
+  .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;}
+  .hero-scroll{position:absolute;bottom:2.5rem;left:3rem;font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:#888;display:flex;align-items:center;gap:0.75rem;}
+  .hero-scroll::before{content:'';display:block;width:40px;height:1px;background:#888;}
+
+  .stats-strip{max-width:1100px;margin:0 auto;padding:4rem 3rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;border-top:1px solid rgba(255,255,255,0.08);}
+  .stat-item{}
+  .stat-num{font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;color:#fff;margin-bottom:0.3rem;}
+  .stat-label{font-size:0.8rem;color:#888;letter-spacing:0.05em;}
+
+  .preview-section{max-width:1100px;margin:0 auto;padding:5rem 3rem;}
+  .preview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;margin-bottom:2rem;}
+  .preview-card{background:#111;padding:1.75rem;transition:background 0.2s;}
+  .preview-card:hover{background:#181818;}
+  .preview-icon{font-size:1.3rem;margin-bottom:0.75rem;}
+  .preview-name{font-size:1rem;font-weight:600;color:#fff;margin-bottom:0.35rem;}
+  .preview-price{font-family:'Space Mono',monospace;font-size:0.85rem;color:#888;}
+  .preview-cta{text-align:center;}
+
+  @media(max-width:768px){
+    .hero{padding:7rem 1.5rem 4rem;}
+    .hero-scroll{left:1.5rem;}
+    .stats-strip{padding:3rem 1.5rem;}
+    .preview-section{padding:4rem 1.5rem;}
+  }
+</style>
+</head>
+<body>
+<div class="hero">
+  <p class="hero-eyebrow">New York City · PC Services</p>
+  <h1>Built different.<br><em>Repaired right.</em></h1>
+  <p class="hero-sub">Custom builds, diagnostics, repairs, and cleaning — done by someone who actually knows what they're doing.</p>
+  <div class="hero-actions">
+    <a href="services.html" class="btn-primary">View Services</a>
+    <a href="contact.html" class="btn-ghost">Get in Touch</a>
+  </div>
+  <span class="hero-scroll">Scroll to explore</span>
+</div>
+
+<div class="divider"></div>
+
+<div class="stats-strip">
+  <div class="stat-item">
+    <p class="stat-num">6</p>
+    <p class="stat-label">Services offered</p>
+  </div>
+  <div class="stat-item">
+    <p class="stat-num">NYC</p>
+    <p class="stat-label">Based & operating locally</p>
+  </div>
+  <div class="stat-item">
+    <p class="stat-num">24hr</p>
+    <p class="stat-label">Response time</p>
+  </div>
+  <div class="stat-item">
+    <p class="stat-num">$0</p>
+    <p class="stat-label">First 15 min consultation</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="preview-section">
+  <p class="section-label">What we do</p>
+  <h2 class="section-title">Services at a glance</h2>
+  <div class="preview-grid">
+    <div class="preview-card">
+      <div class="preview-icon">🖥️</div>
+      <p class="preview-name">Custom PC Build</p>
+      <p class="preview-price">$80 – $200</p>
+    </div>
+    <div class="preview-card">
+      <div class="preview-icon">🔧</div>
+      <p class="preview-name">Repairs & Rebuild</p>
+      <p class="preview-price">$55 – $75 / hr</p>
+    </div>
+    <div class="preview-card">
+      <div class="preview-icon">🔍</div>
+      <p class="preview-name">Diagnostics</p>
+      <p class="preview-price">$30 – $75</p>
+    </div>
+    <div class="preview-card">
+      <div class="preview-icon">🧹</div>
+      <p class="preview-name">PC Cleaning</p>
+      <p class="preview-price">$40 – $100</p>
+    </div>
+    <div class="preview-card">
+      <div class="preview-icon">💬</div>
+      <p class="preview-name">Consultation</p>
+      <p class="preview-price">$25 – $50 / hr</p>
+    </div>
+    <div class="preview-card">
+      <div class="preview-icon">📦</div>
+      <p class="preview-name">Tune-Up Bundle</p>
+      <p class="preview-price">$80 flat</p>
+    </div>
+  </div>
+  <div class="preview-cta">
+    <a href="services.html" class="btn-primary">See full details →</a>
+  </div>
+</div>
+
+<script>injectShared('index.html');</script>
+</body>
+</html>

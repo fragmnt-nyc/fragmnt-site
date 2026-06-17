@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — FRAGMNT</title>
+<script src="shared.js"></script>
+<style>
+  .page-hero{padding:10rem 3rem 4rem;max-width:1100px;margin:0 auto;}
+  .page-hero h1{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:600;letter-spacing:-0.03em;color:#fff;line-height:1.05;margin-bottom:1rem;}
+  .page-hero p{font-size:1.05rem;color:#888;max-width:480px;line-height:1.8;}
+
+  .contact-section{max-width:1100px;margin:0 auto;padding:3rem 3rem 8rem;}
+  .contact-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:5rem;align-items:start;}
+
+  .contact-info-block{display:flex;flex-direction:column;gap:2rem;}
+  .contact-detail-group{}
+  .contact-detail-label{font-family:'Space Mono',monospace;font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:#555;margin-bottom:0.5rem;}
+  .contact-detail-value{font-size:0.9rem;color:#aaa;line-height:1.7;}
+  .contact-detail-value a{color:#aaa;text-decoration:none;transition:color 0.2s;}
+  .contact-detail-value a:hover{color:#fff;}
+
+  .contact-form{display:flex;flex-direction:column;gap:1.25rem;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .form-group{display:flex;flex-direction:column;gap:0.4rem;}
+  .form-group label{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:#888;}
+  .form-group input,.form-group textarea,.form-group select{background:#111;border:1px solid rgba(255,255,255,0.12);border-radius:4px;color:#fff;padding:0.75rem 1rem;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;outline:none;transition:border-color 0.2s;width:100%;}
+  .form-group input::placeholder,.form-group textarea::placeholder{color:#555;}
+  .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:rgba(255,255,255,0.35);}
+  .form-group textarea{resize:vertical;min-height:130px;}
+  .form-group select option{background:#111;}
+  .form-submit{background:#fff;color:#000;border:none;padding:0.9rem;border-radius:4px;font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:opacity 0.2s;}
+  .form-submit:hover{opacity:0.85;}
+  .form-success{display:none;background:#111;border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:1.5rem;text-align:center;color:#888;font-size:0.9rem;line-height:1.6;}
+  .form-success strong{color:#fff;display:block;margin-bottom:0.4rem;}
+
+  @media(max-width:768px){
+    .page-hero{padding:8rem 1.5rem 3rem;}
+    .contact-section{padding:2rem 1.5rem 6rem;}
+    .contact-grid{grid-template-columns:1fr;gap:3rem;}
+    .form-row{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-hero">
+  <p class="section-label">Reach out</p>
+  <h1>Let's talk<br>about your PC.</h1>
+  <p>Send a message and we'll get back to you within 24 hours. Not sure what you need? That's fine — just describe what's going on.</p>
+</div>
+
+<div class="divider"></div>
+
+<div class="contact-section">
+  <div class="contact-grid">
+
+    <div class="contact-info-block">
+      <div class="contact-detail-group">
+        <p class="contact-detail-label">General inquiries</p>
+        <div class="contact-detail-value">
+          <a href="mailto:fragmntnyc@gmail.com">fragmntnyc@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-detail-group">
+        <p class="contact-detail-label">Maximus Bhuiyan</p>
+        <div class="contact-detail-value">
+          <a href="mailto:maximus.bhuiyan06@gmail.com">maximus.bhuiyan06@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-detail-group">
+        <p class="contact-detail-label">Jun</p>
+        <div class="contact-detail-value">
+          <a href="mailto:jun0yed.business@gmail.com">jun0yed.business@gmail.com</a>
+        </div>
+      </div>
+      <div class="contact-detail-group">
+        <p class="contact-detail-label">Location</p>
+        <div class="contact-detail-value">New York City, NY<br>In-person service only</div>
+      </div>
+      <div class="contact-detail-group">
+        <p class="contact-detail-label">Instagram</p>
+        <div class="contact-detail-value">
+          <a href="https://www.instagram.com/fragmnt.nyc/" target="_blank">@fragmnt.nyc ↗</a>
+        </div>
+      </div>
+      <div class="contact-detail-group">
+        <p class="contact-detail-label">Response time</p>
+        <div class="contact-detail-value">Within 24 hours</div>
+      </div>
+    </div>
+
+    <div>
+      <form class="contact-form" id="contactForm" onsubmit="submitForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First name</label>
+            <input type="text" placeholder="First" required>
+          </div>
+          <div class="form-group">
+            <label>Last name</label>
+            <input type="text" placeholder="Last">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Service you're interested in</label>
+          <select>
+            <option value="">Select a service</option>
+            <option>Custom PC Build</option>
+            <option>Repairs &amp; Rebuild</option>
+            <option>Diagnostics</option>
+            <option>PC Cleaning</option>
+            <option>Consultation</option>
+            <option>Tune-Up Bundle</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Tell us what's going on with your PC, what you're looking to build, or any questions you have..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send message</button>
+      </form>
+      <div class="form-success" id="formSuccess">
+        <strong>Message sent.</strong>
+        We'll be in touch within 24 hours at the email you provided.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function submitForm(e) {
+  e.preventDefault();
+  document.getElementById('contactForm').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+}
+injectShared('contact.html');
+</script>
+</body>
+</html>

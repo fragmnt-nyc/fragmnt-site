@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services — FRAGMNT</title>
+<script src="shared.js"></script>
+<style>
+  .page-hero{padding:10rem 3rem 4rem;max-width:1100px;margin:0 auto;}
+  .page-hero h1{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:600;letter-spacing:-0.03em;color:#fff;line-height:1.05;margin-bottom:1rem;}
+  .page-hero p{font-size:1rem;color:#888;max-width:480px;line-height:1.7;}
+
+  .services-section{max-width:1100px;margin:0 auto;padding:3rem 3rem 6rem;}
+
+  .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;}
+  .service-card{background:#111;padding:2rem;transition:background 0.2s;display:flex;flex-direction:column;}
+  .service-card:hover{background:#181818;}
+  .service-card.featured{background:#151515;}
+  .service-icon{font-size:1.5rem;margin-bottom:1rem;}
+  .service-name{font-size:1.05rem;font-weight:600;color:#fff;margin-bottom:0.4rem;}
+  .service-desc{font-size:0.875rem;color:#888;line-height:1.7;margin-bottom:1.25rem;flex:1;}
+  .service-price{font-family:'Space Mono',monospace;font-size:1.15rem;font-weight:700;color:#fff;}
+  .service-note{font-size:0.75rem;color:#888;margin-top:0.2rem;margin-bottom:1.25rem;}
+  .service-includes{margin-bottom:1.25rem;}
+  .service-includes p{font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:#888;margin-bottom:0.5rem;}
+  .service-includes ul{list-style:none;display:flex;flex-direction:column;gap:0.3rem;}
+  .service-includes li{font-size:0.82rem;color:#aaa;display:flex;align-items:center;gap:0.5rem;}
+  .service-includes li::before{content:'—';color:#555;font-size:0.7rem;}
+  .service-book-btn{width:100%;background:transparent;border:1px solid rgba(255,255,255,0.18);color:#888;padding:0.65rem 1rem;border-radius:4px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:500;cursor:pointer;transition:border-color 0.2s,color 0.2s,background 0.2s;text-align:center;text-decoration:none;display:block;}
+  .service-book-btn:hover{border-color:#fff;color:#fff;background:rgba(255,255,255,0.04);}
+  .service-book-btn.primary-btn{background:#fff;color:#000;border-color:#fff;font-weight:600;}
+  .service-book-btn.primary-btn:hover{opacity:0.85;}
+
+  .compare-section{max-width:1100px;margin:0 auto;padding:4rem 3rem 6rem;}
+  .compare-table{width:100%;border-collapse:collapse;font-size:0.875rem;}
+  .compare-table th{text-align:left;font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:#888;padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.08);}
+  .compare-table td{padding:0.9rem 1rem;border-bottom:1px solid rgba(255,255,255,0.05);color:#aaa;vertical-align:top;}
+  .compare-table td:first-child{color:#fff;font-weight:500;}
+  .compare-table tr:hover td{background:rgba(255,255,255,0.02);}
+  .price-cell{font-family:'Space Mono',monospace;color:#fff !important;font-weight:700;}
+  .tag{display:inline-block;font-size:0.7rem;background:rgba(255,255,255,0.07);color:#888;border-radius:3px;padding:0.2rem 0.5rem;letter-spacing:0.05em;}
+  .tag.green{background:rgba(100,200,100,0.1);color:#6dc96d;}
+
+  @media(max-width:768px){
+    .page-hero{padding:8rem 1.5rem 3rem;}
+    .services-section{padding:2rem 1.5rem 5rem;}
+    .compare-section{padding:3rem 1.5rem 5rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page-hero">
+  <p class="section-label">What we offer</p>
+  <h1>Services &<br>Pricing</h1>
+  <p>Every service is done in-person in NYC. No shipping. No mystery fees. You know exactly what you're paying before we start.</p>
+</div>
+
+<div class="divider"></div>
+
+<div class="services-section">
+  <div class="services-grid">
+
+    <div class="service-card">
+      <div class="service-icon">🖥️</div>
+      <p class="service-name">Custom PC Build</p>
+      <p class="service-desc">You source the parts, I assemble everything — cable management, BIOS setup, driver installs, and a full stress test before handoff.</p>
+      <p class="service-price">$80 – $200</p>
+      <p class="service-note">Labor only · client buys parts</p>
+      <div class="service-includes">
+        <p>Includes</p>
+        <ul>
+          <li>Full assembly & cable management</li>
+          <li>BIOS configuration</li>
+          <li>OS + driver installation</li>
+          <li>Stress test & sign-off</li>
+        </ul>
+      </div>
+      <a href="book.html?service=Custom+PC+Build" class="service-book-btn">Book this →</a>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">🔧</div>
+      <p class="service-name">Repairs & Rebuild</p>
+      <p class="service-desc">BSODs, crashes, GPU artifacting, PSU failures — diagnosed and fixed. Full rebuilds handled too if you need a fresh start.</p>
+      <p class="service-price">$55 – $75 / hr</p>
+      <p class="service-note">Hourly rate · parts extra if needed</p>
+      <div class="service-includes">
+        <p>Common repairs</p>
+        <ul>
+          <li>GPU / PSU failures</li>
+          <li>BSOD diagnosis & fix</li>
+          <li>Motherboard swaps</li>
+          <li>Full system rebuilds</li>
+        </ul>
+      </div>
+      <a href="book.html?service=Repairs+%26+Rebuild" class="service-book-btn">Book this →</a>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">🔍</div>
+      <p class="service-name">Diagnostics</p>
+      <p class="service-desc">Full system inspection across GPU, CPU, RAM, PSU, and thermals. You get a clear breakdown of what's wrong and how to fix it.</p>
+      <p class="service-price">$30 – $75</p>
+      <p class="service-note">Basic check-up or full system report</p>
+      <div class="service-includes">
+        <p>Includes</p>
+        <ul>
+          <li>Voltage & thermal monitoring</li>
+          <li>RAM & storage health check</li>
+          <li>Written summary of findings</li>
+          <li>Repair estimate if needed</li>
+        </ul>
+      </div>
+      <a href="book.html?service=Diagnostics" class="service-book-btn">Book this →</a>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">🧹</div>
+      <p class="service-name">PC Cleaning</p>
+      <p class="service-desc">Compressed air dust removal, thermal paste replacement, fan and heatsink cleaning. Your PC will run cooler and quieter.</p>
+      <p class="service-price">$40 – $100</p>
+      <p class="service-note">Basic clean or deep clean</p>
+      <div class="service-includes">
+        <p>Includes</p>
+        <ul>
+          <li>Dust removal (interior + fans)</li>
+          <li>Thermal paste replacement</li>
+          <li>Cable tidying</li>
+          <li>Post-clean temp check</li>
+        </ul>
+      </div>
+      <a href="book.html?service=PC+Cleaning" class="service-book-btn">Book this →</a>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">💬</div>
+      <p class="service-name">Consultation</p>
+      <p class="service-desc">Not sure what parts to buy? Got a problem you can't diagnose? Talk it through — first 15 minutes are on me, no commitment needed.</p>
+      <p class="service-price">$25 – $50 / hr</p>
+      <p class="service-note">First 15 min free</p>
+      <div class="service-includes">
+        <p>Good for</p>
+        <ul>
+          <li>Part picking & budget advice</li>
+          <li>Pre-build planning</li>
+          <li>Upgrade recommendations</li>
+          <li>General troubleshooting advice</li>
+        </ul>
+      </div>
+      <a href="book.html?service=Consultation" class="service-book-btn">Book this →</a>
+    </div>
+
+    <div class="service-card featured">
+      <div class="service-icon">📦</div>
+      <p class="service-name">Tune-Up Bundle</p>
+      <p class="service-desc">Deep cleaning plus full diagnostics in one visit. Best value if your PC's been sluggish, running hot, or just hasn't been touched in a while.</p>
+      <p class="service-price">$80 flat</p>
+      <p class="service-note">Best value · cleaning + diagnostics</p>
+      <div class="service-includes">
+        <p>Everything in</p>
+        <ul>
+          <li>Full deep clean</li>
+          <li>Complete diagnostics</li>
+          <li>Thermal paste swap</li>
+          <li>Written health report</li>
+        </ul>
+      </div>
+      <a href="book.html?service=Tune-Up+Bundle" class="service-book-btn primary-btn">Book this →</a>
+    </div>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="compare-section">
+  <p class="section-label">Pricing overview</p>
+  <h2 class="section-title">Compare services</h2>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Price</th>
+        <th>Turnaround</th>
+        <th>Best for</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Custom PC Build</td>
+        <td class="price-cell">$80 – $200</td>
+        <td>Same day – 2 days</td>
+        <td>New build, first-time builders</td>
+      </tr>
+      <tr>
+        <td>Repairs & Rebuild</td>
+        <td class="price-cell">$55 – $75 / hr</td>
+        <td>Varies by scope</td>
+        <td>Crashes, failures, rebuilds</td>
+      </tr>
+      <tr>
+        <td>Diagnostics</td>
+        <td class="price-cell">$30 – $75</td>
+        <td>Same day</td>
+        <td>Unknown issues, pre-repair check</td>
+      </tr>
+      <tr>
+        <td>PC Cleaning</td>
+        <td class="price-cell">$40 – $100</td>
+        <td>Same day</td>
+        <td>Overheating, loud fans</td>
+      </tr>
+      <tr>
+        <td>Consultation</td>
+        <td class="price-cell">$25 – $50 / hr</td>
+        <td>Flexible</td>
+        <td>Part picking, planning, advice</td>
+      </tr>
+      <tr>
+        <td>Tune-Up Bundle <span class="tag green">Best value</span></td>
+        <td class="price-cell">$80 flat</td>
+        <td>Same day</td>
+        <td>General maintenance, aging PCs</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>injectShared('services.html');</script>
+</body>
+</html>
