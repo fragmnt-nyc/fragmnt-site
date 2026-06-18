@@ -47,3 +47,35 @@ footer{display:flex;align-items:center;justify-content:space-between;max-width:1
   .nav-hamburger{display:block;}
   footer{flex-direction:column;gap:1rem;text-align:center;padding:2rem 1.5rem;}
 }
+
+/* ── SHARED SCROLL ANIMATIONS ── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+}
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+.fade-up.d1 { transition-delay: 0.1s; }
+.fade-up.d2 { transition-delay: 0.2s; }
+.fade-up.d3 { transition-delay: 0.3s; }
+
+.fade-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+}
+.fade-left.visible { opacity: 1; transform: translateX(0); }
+
+.fade-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+}
+.fade-right.visible { opacity: 1; transform: translateX(0); }
+
+.scale-in {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+}
+.scale-in.visible { opacity: 1; transform: scale(1); }
