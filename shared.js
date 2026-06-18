@@ -36,3 +36,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (a.getAttribute('href') === page) a.classList.add('active');
   });
 });
+
+// ── SHARED SCROLL ANIMATION OBSERVER ──
+document.addEventListener('DOMContentLoaded', function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up, .fade-left, .fade-right, .scale-in').forEach(el => observer.observe(el));
+});
