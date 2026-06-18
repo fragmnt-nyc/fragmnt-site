@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="FRAG1.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Showcase — FRAGMNT</title>
+<link rel="stylesheet" href="shared.css">
+<script src="shared.js"></script>
+<style>
+  /* ── HERO ── */
+  .showcase-hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(4rem, 14vw, 14rem);
+    font-weight: 700;
+    color: rgba(255,255,255,0.03);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s cubic-bezier(.2,.7,.3,1) 0.2s forwards;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 7vw, 7rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.95;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.9s cubic-bezier(.2,.7,.3,1) 0.35s forwards;
+  }
+
+  .hero-title em { font-style: normal; color: #444; }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: #666;
+    max-width: 400px;
+    line-height: 1.7;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s cubic-bezier(.2,.7,.3,1) 0.5s forwards;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s cubic-bezier(.2,.7,.3,1) 1s forwards;
+  }
+
+  .scroll-hint span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #555;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, #555, transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.2); }
+  }
+
+  /* ── INTRO STAT STRIP ── */
+  .stat-strip {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 3rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .stat-block {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s cubic-bezier(.2,.7,.3,1), transform 0.7s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .stat-block.visible { opacity: 1; transform: translateY(0); }
+  .stat-block:nth-child(2) { transition-delay: 0.1s; }
+  .stat-block:nth-child(3) { transition-delay: 0.2s; }
+
+  .stat-num {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.5;
+  }
+
+  /* ── BUILD SECTION ── */
+  .build-section {
+    padding: 6rem 0;
+    overflow: hidden;
+  }
+
+  .build-label {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 3rem 3rem;
+  }
+
+  /* ── STICKY BEFORE/AFTER ── */
+  .sticky-reveal {
+    position: relative;
+    height: 250vh;
+  }
+
+  .sticky-inner {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .reveal-stage {
+    width: 100%;
+    max-width: 1100px;
+    padding: 0 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .reveal-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0d0d0d;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .reveal-card img {
+    width: 100%;
+    height: 480px;
+    object-fit: contain;
+    padding: 1.5rem;
+    transition: transform 0.6s cubic-bezier(.2,.7,.3,1);
+    display: block;
+  }
+
+  .reveal-card:hover img { transform: scale(1.03); }
+
+  .card-tag {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.75rem;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+
+  .card-tag.before {
+    background: rgba(255,255,255,0.06);
+    color: #888;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .card-tag.after {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .reveal-info {
+    opacity: 0;
+    transform: translateX(30px);
+    transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .reveal-info.visible { opacity: 1; transform: translateX(0); }
+
+  /* ── SLIDE-IN CARDS ── */
+  .builds-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 6rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .build-card {
+    background: #0d0d0d;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .build-card.visible { opacity: 1; transform: translateY(0); }
+  .build-card:nth-child(2) { transition-delay: 0.15s; }
+  .build-card:nth-child(3) { transition-delay: 0.1s; }
+  .build-card:nth-child(4) { transition-delay: 0.25s; }
+
+  .build-card img {
+    width: 100%;
+    height: 380px;
+    object-fit: contain;
+    padding: 2rem;
+    transition: transform 0.7s cubic-bezier(.2,.7,.3,1);
+    background: #0a0a0a;
+  }
+
+  .build-card:hover img { transform: scale(1.05); }
+
+  .build-card-info {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .build-card-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 0.5rem;
+  }
+
+  .build-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.3rem;
+  }
+
+  .build-card-desc {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  /* ── ARROW SECTION ── */
+  .transform-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4rem 3rem 8rem;
+    text-align: center;
+  }
+
+  .transform-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.7s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .transform-label.visible { opacity: 1; transform: translateY(0); }
+
+  .transform-heading {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(.2,.7,.3,1) 0.1s;
+  }
+
+  .transform-heading.visible { opacity: 1; transform: translateY(0); }
+
+  .transform-cta {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.7s cubic-bezier(.2,.7,.3,1) 0.2s;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .transform-cta.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── FLOATING PARALLAX IMAGES ── */
+  .parallax-section {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .parallax-img {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
+
+  .parallax-img.visible { opacity: 1; }
+
+  .parallax-img-1 {
+    width: clamp(280px, 35vw, 480px);
+    left: 5%;
+    top: 10%;
+    transform: rotate(-4deg);
+    z-index: 2;
+  }
+
+  .parallax-img-2 {
+    width: clamp(220px, 28vw, 380px);
+    right: 8%;
+    bottom: 15%;
+    transform: rotate(3deg);
+    z-index: 1;
+  }
+
+  .parallax-img img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+  }
+
+  .parallax-center-text {
+    z-index: 3;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.9s cubic-bezier(.2,.7,.3,1) 0.3s;
+  }
+
+  .parallax-center-text.visible { opacity: 1; transform: scale(1); }
+
+  .parallax-center-text h2 {
+    font-size: clamp(2rem, 5vw, 5rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    color: #fff;
+    line-height: 1;
+    mix-blend-mode: difference;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width: 768px) {
+    .stat-strip { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
+    .reveal-stage { grid-template-columns: 1fr; gap: 1.5rem; padding: 0 1.5rem; }
+    .reveal-card img { height: 280px; }
+    .builds-grid { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
+    .build-card img { height: 280px; }
+    .build-label, .transform-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .parallax-img-1 { width: 55vw; left: 2%; }
+    .parallax-img-2 { width: 45vw; right: 2%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="showcase-hero">
+  <div class="hero-bg-text">WORK</div>
+  <p class="hero-eyebrow">Client builds · NYC</p>
+  <h1 class="hero-title">The work<br><em>speaks.</em></h1>
+  <p class="hero-sub">Real machines. Real results. Before and after a Fragmnt rebuild.</p>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- STAT STRIP -->
+<div class="stat-strip">
+  <div class="stat-block">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Stress tested before<br>every handoff</div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-num">NYC</div>
+    <div class="stat-label">In-person service<br>only, always</div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-num">0</div>
+    <div class="stat-label">Hidden fees or<br>part markups</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- BEFORE / AFTER STICKY REVEAL -->
+<div class="build-section">
+  <div class="build-label">
+    <p class="section-label">Client rebuild — Case 01</p>
+    <h2 class="section-title" style="margin-bottom:0;">Before & After</h2>
+  </div>
+
+  <div class="sticky-reveal">
+    <div class="sticky-inner">
+      <div class="reveal-stage">
+        <div class="reveal-card">
+          <span class="card-tag before">Before</span>
+          <img src="IMG_5026-removebg-preview.png" alt="PC before rebuild">
+        </div>
+        <div class="reveal-card">
+          <span class="card-tag after">After</span>
+          <img src="IMG_5060-removebg-preview.png" alt="PC after rebuild">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PARALLAX FLOATING SECTION -->
+<div class="parallax-section" id="parallaxSection">
+  <div class="parallax-img parallax-img-1" id="pImg1">
+    <img src="IMG_5029-removebg-preview.png" alt="Before — angle 2">
+  </div>
+  <div class="parallax-center-text" id="parallaxText">
+    <h2>Every detail.<br>Rebuilt right.</h2>
+  </div>
+  <div class="parallax-img parallax-img-2" id="pImg2">
+    <img src="IMG_5066-removebg-preview.png" alt="After — RGB build">
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ALL 4 IMAGES GRID -->
+<div class="builds-grid">
+  <div class="build-card">
+    <img src="IMG_5026-removebg-preview.png" alt="Before — front angle">
+    <div class="build-card-info">
+      <div class="build-card-tag">Before · Case 01</div>
+      <div class="build-card-title">Client Rebuild</div>
+      <div class="build-card-desc">Disorganized cables, aging thermal paste, dusty internals.</div>
+    </div>
+  </div>
+  <div class="build-card">
+    <img src="IMG_5060-removebg-preview.png" alt="After — front angle">
+    <div class="build-card-info">
+      <div class="build-card-tag">After · Case 01</div>
+      <div class="build-card-title">Full Rebuild</div>
+      <div class="build-card-desc">New motherboard, clean cable routing, MSI GeForce RTX installed.</div>
+    </div>
+  </div>
+  <div class="build-card">
+    <img src="IMG_5029-removebg-preview.png" alt="Before — side angle">
+    <div class="build-card-info">
+      <div class="build-card-tag">Before · Case 02</div>
+      <div class="build-card-title">Client Rebuild</div>
+      <div class="build-card-desc">Loose components, poor airflow configuration, worn hardware.</div>
+    </div>
+  </div>
+  <div class="build-card">
+    <img src="IMG_5066-removebg-preview.png" alt="After — RGB lit">
+    <div class="build-card-info">
+      <div class="build-card-tag">After · Case 02</div>
+      <div class="build-card-title">Full Rebuild + RGB</div>
+      <div class="build-card-desc">Triple cyan ARGB fans, MSI RTX, optimized airflow, stress tested.</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+<div class="transform-section">
+  <p class="transform-label">Ready?</p>
+  <h2 class="transform-heading">Your build<br>could be next.</h2>
+  <div class="transform-cta">
+    <a href="book.html" class="btn-primary">Book a service</a>
+    <a href="services.html" class="btn-ghost">View services</a>
+  </div>
+</div>
+
+<script>
+// ── INTERSECTION OBSERVER — scroll-triggered animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll(
+  '.stat-block, .build-card, .reveal-info, .transform-label, .transform-heading, .transform-cta, .parallax-img, .parallax-center-text'
+).forEach(el => observer.observe(el));
+
+// ── PARALLAX on scroll
+window.addEventListener('scroll', () => {
+  const p1 = document.getElementById('pImg1');
+  const p2 = document.getElementById('pImg2');
+  const section = document.getElementById('parallaxSection');
+  if (!section) return;
+  const rect = section.getBoundingClientRect();
+  const progress = -rect.top / window.innerHeight;
+  if (progress > -0.5 && progress < 1.5) {
+    p1.style.transform = `rotate(-4deg) translateY(${progress * 40}px)`;
+    p2.style.transform = `rotate(3deg) translateY(${progress * -40}px)`;
+  }
+});
+</script>
+
+</body>
+</html>
