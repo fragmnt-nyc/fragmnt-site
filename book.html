@@ -212,8 +212,31 @@
   .radio-opt input{width:auto;accent-color:#fff;cursor:pointer;}
   .radio-opt:hover{color:#fff;}
 
-  .extra-fields{display:none;flex-direction:column;gap:1rem;}
-  .extra-fields.visible{display:flex;}
+  .extra-fields{
+    display:flex;
+    flex-direction:column;
+    gap:1rem;
+    opacity:0;
+    transform:translateY(12px);
+    max-height:0;
+    overflow:hidden;
+    pointer-events:none;
+    transition:opacity 0.4s cubic-bezier(.2,.7,.3,1), transform 0.4s cubic-bezier(.2,.7,.3,1), max-height 0.5s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .extra-fields.visible{
+    opacity:1;
+    transform:translateY(0);
+    max-height:2000px;
+    pointer-events:all;
+  }
+
+  .extra-fields.exiting{
+    opacity:0;
+    transform:translateY(-10px);
+    max-height:0;
+    pointer-events:none;
+  }
 
   .extra-divider{
     font-family:'Space Mono',monospace;
@@ -547,30 +570,75 @@
 
 <script>
 let selected = false;
+let currentKey = null;
 
 function selectService(el, key, name) {
+  if (currentKey === key) return;
+
   // Highlight selection
   document.querySelectorAll('.service-option').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
 
-  // Set form values
-  document.getElementById('hiddenService').value = name;
-  document.getElementById('formServiceLabel').textContent = name;
-
-  // Hide all extra fields
-  document.querySelectorAll('.extra-fields').forEach(f => f.classList.remove('visible'));
-  const target = document.getElementById('fields-' + key);
-  if (target) target.classList.add('visible');
-
-  // First time — animate picker to side and reveal form
+  // First time — slide picker to side and reveal form
   if (!selected) {
     selected = true;
+    currentKey = key;
+    document.getElementById('hiddenService').value = name;
+    document.getElementById('formServiceLabel').textContent = name;
     document.getElementById('pickerWrap').classList.add('moved');
     setTimeout(() => {
       document.getElementById('stageDivider').classList.add('visible');
       document.getElementById('formPanel').classList.add('visible');
-    }, 300);
+      // Animate in the extra fields
+      const target = document.getElementById('fields-' + key);
+      if (target) target.classList.add('visible');
+    }, 350);
+    return;
   }
+
+  // Switching services — animate out old, animate in new
+  const formPanel = document.getElementById('formPanel');
+
+  // Fade out form panel
+  formPanel.style.opacity = '0';
+  formPanel.style.transform = 'translateX(15px)';
+  formPanel.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+
+  setTimeout(() => {
+    // Swap content
+    document.getElementById('hiddenService').value = name;
+    document.getElementById('formServiceLabel').textContent = name;
+
+    // Exit old fields
+    if (currentKey) {
+      const old = document.getElementById('fields-' + currentKey);
+      if (old) {
+        old.classList.add('exiting');
+        old.classList.remove('visible');
+        setTimeout(() => old.classList.remove('exiting'), 400);
+      }
+    }
+
+    currentKey = key;
+
+    // Enter new fields after a beat
+    setTimeout(() => {
+      const target = document.getElementById('fields-' + key);
+      if (target) target.classList.add('visible');
+    }, 80);
+
+    // Fade form panel back in from the other side
+    formPanel.style.transform = 'translateX(-15px)';
+    formPanel.style.opacity = '0';
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        formPanel.style.transition = 'opacity 0.35s cubic-bezier(.2,.7,.3,1), transform 0.35s cubic-bezier(.2,.7,.3,1)';
+        formPanel.style.opacity = '1';
+        formPanel.style.transform = 'translateX(0)';
+      });
+    });
+  }, 250);
 }
 
 async function submitBooking(e) {
