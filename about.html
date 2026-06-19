@@ -41,11 +41,32 @@
     .story-grid{grid-template-columns:1fr;gap:2.5rem;}
     .team-section,.values-section{padding:3rem 1.5rem 5rem;}
   }
+
+  /* ── SPLIT SCROLL EFFECT ── */
+  .split-block {
+    transition: opacity 0.55s cubic-bezier(.4,0,.2,1), transform 0.55s cubic-bezier(.4,0,.2,1);
+    will-change: transform, opacity;
+  }
+
+  .split-block.split-left {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+
+  .split-block.split-right {
+    opacity: 0;
+    transform: translateX(80px);
+  }
+
+  .split-block.in-view {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+  }
 </style>
 </head>
 <body>
 
-<div class="page-hero">
+<div class="page-hero split-block split-left">
   <p class="section-label">Who we are</p>
   <h1>Built in NYC.<br>Built for real.</h1>
   <p>Fragmnt is a NYC-based PC services operation run by two people who actually know their way around a build.</p>
@@ -55,11 +76,11 @@
 
 <div class="story-section">
   <div class="story-grid">
-    <div>
+    <div class="split-block split-left">
       <p class="section-label">Our story</p>
       <h2 class="section-title">No big box stores.<br>Just us.</h2>
     </div>
-    <div class="story-body fade-right">
+    <div class="story-body split-block split-right">
       <p>Fragmnt started because we got tired of watching people overpay for mediocre service at places that treat your PC like a number in a queue.</p>
       <p>We've diagnosed PSU failures under load, tracked down BSODs nobody else could explain, and built custom rigs from scratch — <strong>hands-on experience, not textbook knowledge.</strong></p>
       <p>Based in New York City, we work with clients directly — no shipping, no middle layer, no mystery charges. You know what you're paying, what we're doing, and why.</p>
@@ -71,51 +92,48 @@
 <div class="divider"></div>
 
 <div class="team-section">
-  <p class="section-label">The team</p>
-  <h2 class="section-title">Who you're working with</h2>
+  <p class="section-label split-block split-left">The team</p>
+  <h2 class="section-title split-block split-right">Who you're working with</h2>
   <div class="team-grid">
-
-    <div class="team-card fade-up">
+    <div class="team-card split-block split-left">
       <div class="team-avatar">MB</div>
       <p class="team-name">Maximus Bhuiyan</p>
       <p class="team-role">Founder · Chief Technician, Rig Architect & Consultant</p>
       <p class="team-bio">Hands-on expertise in custom PC builds, hardware diagnostics, and full system rehabilitation. Experienced in tracing component-level failures — PSU, GPU, RAM, thermal — and resolving them efficiently. Builds engineered for performance, longevity, and clean execution. Currently pursuing engineering through the Columbia 3-2 program at CUNY Queens College.</p>
       <a href="mailto:maximus.bhuiyan06@gmail.com" class="team-email">maximus.bhuiyan06@gmail.com</a>
     </div>
-
-    <div class="team-card fade-up">
+    <div class="team-card split-block split-right">
       <div class="team-avatar">JH</div>
       <p class="team-name">Junayed Haider</p>
       <p class="team-role">Founder</p>
       <p class="team-bio">TBD</p>
       <a href="mailto:jrediah.inquiries@gmail.com" class="team-email">jrediah.inquiries@gmail.com</a>
     </div>
-
   </div>
 </div>
 
 <div class="divider"></div>
 
 <div class="values-section">
-  <p class="section-label">How we operate</p>
-  <h2 class="section-title">What makes us different</h2>
+  <p class="section-label split-block split-left">How we operate</p>
+  <h2 class="section-title split-block split-right">What makes us different</h2>
   <div class="values-grid">
-    <div class="value-item fade-up">
+    <div class="value-item split-block split-left">
       <p class="value-num">01</p>
       <p class="value-heading">Real experience</p>
       <p class="value-body">We've diagnosed and repaired real machines — PSU failures, GPU crashes, BSODs, full rebuilds. Not theory. Actual work.</p>
     </div>
-    <div class="value-item fade-up">
+    <div class="value-item split-block split-right">
       <p class="value-num">02</p>
       <p class="value-heading">Transparent pricing</p>
       <p class="value-body">You know what you're paying before we touch anything. No hidden fees, no surprise invoices at the end.</p>
     </div>
-    <div class="value-item fade-up">
+    <div class="value-item split-block split-left">
       <p class="value-num">03</p>
       <p class="value-heading">Local to NYC</p>
       <p class="value-body">In-person service only. We're not shipping your rig anywhere — you deal with us directly, start to finish.</p>
     </div>
-    <div class="value-item fade-up">
+    <div class="value-item split-block split-right">
       <p class="value-num">04</p>
       <p class="value-heading">You own the parts</p>
       <p class="value-body">For builds, we source the components. We handle assembly and setup — and you stay in control of your budget.</p>
@@ -123,6 +141,24 @@
   </div>
 </div>
 
-<script>// nav auto-injected by shared.js</script>
+<script>
+// Split scroll — reassembles when in view, splits when out
+const splitObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in-view');
+    } else {
+      // Remove in-view so it re-animates when scrolled back
+      e.target.classList.remove('in-view');
+    }
+  });
+}, {
+  threshold: 0.12,
+  rootMargin: '0px 0px -40px 0px'
+});
+
+document.querySelectorAll('.split-block').forEach(el => splitObserver.observe(el));
+// nav auto-injected by shared.js
+</script>
 </body>
 </html>
