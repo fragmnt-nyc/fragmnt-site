@@ -8,33 +8,15 @@
 <link rel="stylesheet" href="shared.css">
 <script src="shared.js"></script>
 <style>
-  /* ── GLOBAL ANIMATION BASE ── */
-  .fade-up {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+  :root {
+    --mono: 'Space Mono', monospace;
+    --ash: #888;
+    --ash-dim: #555;
+    --line: rgba(255,255,255,0.07);
   }
-  .fade-up.visible { opacity: 1; transform: translateY(0); }
-  .fade-up.d1 { transition-delay: 0.1s; }
-  .fade-up.d2 { transition-delay: 0.2s; }
-  .fade-up.d3 { transition-delay: 0.3s; }
-
-  .fade-left {
-    opacity: 0;
-    transform: translateX(-40px);
-    transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
-  }
-  .fade-left.visible { opacity: 1; transform: translateX(0); }
-
-  .fade-right {
-    opacity: 0;
-    transform: translateX(40px);
-    transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
-  }
-  .fade-right.visible { opacity: 1; transform: translateX(0); }
 
   /* ── HERO ── */
-  .showcase-hero {
+  .sc-hero {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -46,57 +28,116 @@
     overflow: hidden;
   }
 
-  .hero-bg-text {
+  /* Animated gradient orbs in background */
+  .orb {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Space Mono', monospace;
-    font-size: clamp(5rem, 18vw, 18rem);
-    font-weight: 700;
-    color: rgba(255,255,255,0.025);
-    white-space: nowrap;
+    border-radius: 50%;
+    filter: blur(80px);
     pointer-events: none;
-    user-select: none;
+    opacity: 0;
+    animation: orbFloat 0s forwards;
   }
 
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+    top: -10%; left: -10%;
+    animation: orbFloat1 8s ease-in-out infinite 0.5s, orbAppear 1.5s ease 0.2s forwards;
+  }
+
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+    bottom: -5%; right: -5%;
+    animation: orbFloat2 10s ease-in-out infinite 0.5s, orbAppear 1.5s ease 0.5s forwards;
+  }
+
+  .orb-3 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+    top: 40%; left: 60%;
+    animation: orbFloat3 12s ease-in-out infinite 0.5s, orbAppear 1.5s ease 0.8s forwards;
+  }
+
+  @keyframes orbAppear { to { opacity: 1; } }
+  @keyframes orbFloat1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,30px)} }
+  @keyframes orbFloat2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,-40px)} }
+  @keyframes orbFloat3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-30px)} }
+
+  /* Hero text */
   .hero-eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.22em;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: #666;
-    margin-bottom: 1.5rem;
+    color: var(--ash-dim);
+    margin-bottom: 2rem;
     opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 0.8s cubic-bezier(.2,.7,.3,1) 0.2s forwards;
+    animation: heroRise 0.8s cubic-bezier(.2,.7,.3,1) 0.3s forwards;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 1px;
+    background: var(--ash-dim);
   }
 
   .hero-title {
-    font-size: clamp(3.5rem, 8vw, 8rem);
+    font-size: clamp(4rem, 10vw, 10rem);
     font-weight: 600;
-    letter-spacing: -0.04em;
-    line-height: 0.95;
+    letter-spacing: -0.05em;
+    line-height: 0.9;
     color: #fff;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     opacity: 0;
-    transform: translateY(30px);
-    animation: fadeUp 0.9s cubic-bezier(.2,.7,.3,1) 0.35s forwards;
+    animation: heroRise 1s cubic-bezier(.2,.7,.3,1) 0.5s forwards;
+    position: relative;
+    z-index: 2;
   }
 
-  .hero-title em { font-style: normal; color: #333; }
+  /* Each word animates separately */
+  .hero-title .word {
+    display: inline-block;
+    overflow: hidden;
+  }
+
+  .hero-title .word span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(100%);
+    animation: wordRise 0.8s cubic-bezier(.2,.7,.3,1) forwards;
+  }
+
+  .hero-title .word:nth-child(1) span { animation-delay: 0.4s; }
+  .hero-title .word:nth-child(2) span { animation-delay: 0.55s; }
+  .hero-title .word:nth-child(3) span { animation-delay: 0.7s; }
+
+  @keyframes wordRise { to { opacity: 1; transform: translateY(0); } }
 
   .hero-sub {
     font-size: 1rem;
-    color: #666;
-    max-width: 380px;
-    line-height: 1.7;
+    color: var(--ash);
+    max-width: 360px;
+    line-height: 1.8;
     opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 0.8s cubic-bezier(.2,.7,.3,1) 0.5s forwards;
+    animation: heroRise 0.8s cubic-bezier(.2,.7,.3,1) 0.9s forwards;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 3rem;
   }
 
-  .scroll-hint {
+  @keyframes heroRise { to { opacity: 1; transform: translateY(0); } }
+
+  /* Scroll indicator */
+  .scroll-indicator {
     position: absolute;
     bottom: 2.5rem;
     left: 50%;
@@ -106,280 +147,555 @@
     align-items: center;
     gap: 0.5rem;
     opacity: 0;
-    animation: fadeUp 0.8s ease 1.2s forwards;
+    animation: heroRise 0.6s ease 1.4s forwards;
+    z-index: 2;
   }
 
-  .scroll-hint span {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
+  .scroll-indicator span {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: #444;
+    color: var(--ash-dim);
   }
 
-  .scroll-line {
-    width: 1px;
-    height: 48px;
-    background: linear-gradient(to bottom, #555, transparent);
-    animation: scrollDrop 2s ease-in-out infinite 1.5s;
+  .scroll-mouse {
+    width: 20px;
+    height: 32px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
   }
 
-  @keyframes scrollDrop {
-    0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
-    50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
-    100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+  .scroll-wheel {
+    width: 3px;
+    height: 6px;
+    background: #fff;
+    border-radius: 2px;
+    animation: scrollWheel 2s ease-in-out infinite;
   }
 
-  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes scrollWheel {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(10px); }
+  }
 
-  /* ── STAT STRIP ── */
-  .stat-strip {
+  /* ── STATS ── */
+  .stats-section {
     max-width: 1100px;
     margin: 0 auto;
     padding: 5rem 3rem;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    gap: 0;
   }
 
+  .stat-item {
+    padding: 2.5rem;
+    border-right: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s cubic-bezier(.2,.7,.3,1), transform 0.7s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .stat-item:first-child { padding-left: 0; }
+  .stat-item:last-child { border-right: none; }
+  .stat-item.in-view { opacity: 1; transform: translateY(0); }
+  .stat-item:nth-child(2) { transition-delay: 0.12s; }
+  .stat-item:nth-child(3) { transition-delay: 0.24s; }
+
   .stat-num {
-    font-family: 'Space Mono', monospace;
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-family: var(--mono);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
     font-weight: 700;
     color: #fff;
     line-height: 1;
     margin-bottom: 0.5rem;
+    letter-spacing: -0.03em;
   }
 
-  .stat-label { font-size: 0.85rem; color: #555; line-height: 1.6; }
+  .stat-label { font-size: 0.82rem; color: var(--ash); line-height: 1.6; }
 
-  /* ── BEFORE/AFTER SECTION ── */
+  /* ── SECTION INTRO ── */
+  .section-intro {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 3rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .section-intro.in-view { opacity: 1; transform: translateY(0); }
+  .section-intro p { font-size: 0.9rem; color: var(--ash); line-height: 1.8; }
+
+  /* ── BEFORE/AFTER REVEAL ── */
   .ba-section {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 6rem 3rem;
+    padding: 3rem 3rem 6rem;
   }
 
+  /* Case label */
+  .case-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.6s cubic-bezier(.2,.7,.3,1), transform 0.6s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .case-label.in-view { opacity: 1; transform: translateX(0); }
+  .case-label::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+  /* BA pair */
   .ba-pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 5rem;
+    gap: 2px;
+    margin-bottom: 6rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    overflow: hidden;
   }
 
   .ba-pair:last-child { margin-bottom: 0; }
 
   .ba-card {
     background: #0a0a0a;
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  /* Image container with clip reveal */
+  .ba-img-wrap {
     overflow: hidden;
     position: relative;
+    height: 480px;
+  }
+
+  .ba-img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.8) 100%);
+    pointer-events: none;
+    z-index: 1;
   }
 
   .ba-card img {
     width: 100%;
-    height: 420px;
+    height: 100%;
     object-fit: contain;
     padding: 2rem;
     display: block;
-    transition: transform 0.7s cubic-bezier(.2,.7,.3,1);
+    transition: transform 0.9s cubic-bezier(.2,.7,.3,1);
+    transform: scale(1.05);
+    opacity: 0;
+    filter: blur(6px);
   }
 
-  .ba-card:hover img { transform: scale(1.04); }
+  .ba-card.in-view img {
+    transform: scale(1);
+    opacity: 1;
+    filter: blur(0);
+    transition: transform 0.9s cubic-bezier(.2,.7,.3,1), opacity 0.8s ease, filter 0.8s ease;
+  }
 
+  .ba-card:nth-child(2).in-view img {
+    transition-delay: 0.15s;
+  }
+
+  .ba-card:hover img { transform: scale(1.03); }
+
+  /* Tag */
   .ba-tag {
     position: absolute;
-    top: 1rem;
-    left: 1rem;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.62rem;
+    top: 1.25rem;
+    left: 1.25rem;
+    z-index: 2;
+    font-family: var(--mono);
+    font-size: 0.6rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    padding: 0.3rem 0.7rem;
+    padding: 0.3rem 0.75rem;
     border-radius: 3px;
     font-weight: 700;
+    backdrop-filter: blur(8px);
   }
 
-  .ba-tag.before { background: rgba(255,255,255,0.05); color: #666; border: 1px solid rgba(255,255,255,0.08); }
-  .ba-tag.after  { background: rgba(255,255,255,0.1);  color: #fff; border: 1px solid rgba(255,255,255,0.18); }
+  .ba-tag.before {
+    background: rgba(0,0,0,0.6);
+    color: var(--ash);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
 
+  .ba-tag.after {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  /* Info bar */
   .ba-info {
-    padding: 1.25rem 1.5rem;
+    padding: 1.5rem;
+    position: relative;
+    z-index: 2;
     border-top: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .ba-info-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: #555;
-    margin-bottom: 0.4rem;
-  }
-
-  .ba-info-title { font-size: 0.95rem; font-weight: 600; color: #fff; margin-bottom: 0.25rem; }
-  .ba-info-desc { font-size: 0.8rem; color: #555; line-height: 1.6; }
-
-  /* ── ARROW DIVIDER ── */
-  .arrow-divider {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-    padding: 1rem 0 3rem;
+    justify-content: space-between;
+    gap: 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s cubic-bezier(.2,.7,.3,1) 0.3s, transform 0.6s cubic-bezier(.2,.7,.3,1) 0.3s;
   }
 
-  .arrow-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
-  .arrow-text {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #444;
-    white-space: nowrap;
+  .ba-card.in-view .ba-info { opacity: 1; transform: translateY(0); }
+
+  .ba-info-title { font-size: 0.9rem; font-weight: 600; color: #fff; margin-bottom: 0.2rem; }
+  .ba-info-desc { font-size: 0.75rem; color: var(--ash); line-height: 1.5; }
+  .ba-info-arrow {
+    font-size: 1.2rem;
+    color: rgba(255,255,255,0.2);
+    flex-shrink: 0;
+    transition: transform 0.3s, color 0.3s;
+  }
+  .ba-card:hover .ba-info-arrow { transform: translateX(4px); color: #fff; }
+
+  /* ── FULL WIDTH STATEMENT ── */
+  .statement-section {
+    padding: 8rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .statement-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.03) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .statement-text {
+    font-size: clamp(2rem, 5vw, 5rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    color: #fff;
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .statement-text .dim { color: rgba(255,255,255,0.2); }
+
+  /* Each line slides in */
+  .statement-line {
+    overflow: hidden;
+    display: block;
+  }
+
+  .statement-line span {
+    display: block;
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .statement-line:nth-child(2) span { transition-delay: 0.1s; }
+  .statement-line:nth-child(3) span { transition-delay: 0.2s; }
+
+  .statement-section.in-view .statement-line span {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   /* ── CTA ── */
   .cta-section {
     max-width: 900px;
     margin: 0 auto;
-    padding: 5rem 3rem 8rem;
+    padding: 4rem 3rem 8rem;
     text-align: center;
   }
 
-  .cta-section h2 {
+  .cta-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(.2,.7,.3,1), transform 0.6s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .cta-heading {
     font-size: clamp(2.5rem, 5vw, 5rem);
     font-weight: 600;
     letter-spacing: -0.04em;
-    color: #fff;
     line-height: 1;
+    color: #fff;
     margin-bottom: 1rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(.2,.7,.3,1) 0.1s, transform 0.8s cubic-bezier(.2,.7,.3,1) 0.1s;
   }
 
-  .cta-section p { font-size: 1rem; color: #555; margin-bottom: 2.5rem; }
+  .cta-sub {
+    font-size: 0.9rem;
+    color: var(--ash);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(.2,.7,.3,1) 0.2s, transform 0.6s cubic-bezier(.2,.7,.3,1) 0.2s;
+  }
 
-  .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .cta-btns {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(.2,.7,.3,1) 0.3s, transform 0.6s cubic-bezier(.2,.7,.3,1) 0.3s;
+  }
 
+  .cta-section.in-view .cta-eyebrow,
+  .cta-section.in-view .cta-heading,
+  .cta-section.in-view .cta-sub,
+  .cta-section.in-view .cta-btns {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
   @media(max-width: 768px) {
-    .stat-strip { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
-    .ba-section { padding: 4rem 1.5rem; }
+    .sc-hero { padding: 7rem 1.5rem 5rem; }
+    .stats-section { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
+    .stat-item { border-right: none; border-bottom: 1px solid var(--line); padding: 1.5rem 0; }
+    .stat-item:last-child { border-bottom: none; }
+    .section-intro { grid-template-columns: 1fr; gap: 1.5rem; padding: 3rem 1.5rem 1.5rem; }
+    .ba-section { padding: 2rem 1.5rem 4rem; }
     .ba-pair { grid-template-columns: 1fr; }
-    .ba-card img { height: 300px; }
-    .cta-section { padding: 4rem 1.5rem 6rem; }
+    .ba-img-wrap { height: 300px; }
+    .statement-section { padding: 5rem 1.5rem; }
+    .cta-section { padding: 3rem 1.5rem 6rem; }
   }
 </style>
 </head>
 <body>
 
-<!-- HERO -->
-<div class="showcase-hero">
-  <div class="hero-bg-text">WORK</div>
-  <p class="hero-eyebrow">Client builds · NYC</p>
-  <h1 class="hero-title">The work<br><em>speaks.</em></h1>
-  <p class="hero-sub">Real machines. Real results. Before and after a Fragmnt rebuild.</p>
-  <div class="scroll-hint">
+<!-- ── HERO ── -->
+<div class="sc-hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <p class="hero-eyebrow">Client builds · New York City</p>
+
+  <h1 class="hero-title">
+    <span class="word"><span>The</span></span>&nbsp;
+    <span class="word"><span>work</span></span>&nbsp;
+    <span class="word"><span>speaks.</span></span>
+  </h1>
+
+  <p class="hero-sub">Real machines. Real results. Before and after a Fragmnt rebuild — no filters, no staging.</p>
+
+  <div class="scroll-indicator">
+    <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
     <span>Scroll</span>
-    <div class="scroll-line"></div>
   </div>
 </div>
 
 <div class="divider"></div>
 
-<!-- STATS -->
-<div class="stat-strip">
-  <div class="fade-up">
+<!-- ── STATS ── -->
+<div class="stats-section">
+  <div class="stat-item">
     <div class="stat-num">100%</div>
-    <div class="stat-label">Stress tested before every handoff</div>
+    <div class="stat-label">Stress tested before<br>every single handoff</div>
   </div>
-  <div class="fade-up d1">
+  <div class="stat-item">
     <div class="stat-num">NYC</div>
-    <div class="stat-label">In-person service only, always</div>
+    <div class="stat-label">In-person only.<br>Always.</div>
   </div>
-  <div class="fade-up d2">
+  <div class="stat-item">
     <div class="stat-num">$0</div>
-    <div class="stat-label">Hidden fees or part markups</div>
-  </div>
-</div>
-
-<!-- BEFORE / AFTER -->
-<div class="ba-section">
-  <div class="fade-up" style="margin-bottom:3rem;">
-    <p class="section-label">Client rebuild — Case 01</p>
-    <h2 class="section-title" style="margin-bottom:0;">Before & After</h2>
-  </div>
-
-  <!-- PAIR 1 -->
-  <div class="ba-pair">
-    <div class="ba-card fade-left">
-      <span class="ba-tag before">Before</span>
-      <img src="IMG_5026-removebg-preview.png" alt="Before rebuild">
-      <div class="ba-info">
-        <div class="ba-info-label">Before · Case 01</div>
-        <div class="ba-info-title">Client Rebuild</div>
-        <div class="ba-info-desc">Disorganized cables, aging thermal paste, dusty internals.</div>
-      </div>
-    </div>
-    <div class="ba-card fade-right">
-      <span class="ba-tag after">After</span>
-      <img src="IMG_5060-removebg-preview.png" alt="After rebuild">
-      <div class="ba-info">
-        <div class="ba-info-label">After · Case 01</div>
-        <div class="ba-info-title">Full Rebuild</div>
-        <div class="ba-info-desc">New motherboard, clean cable routing, MSI GeForce RTX installed.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow-divider fade-up">
-    <div class="arrow-line"></div>
-    <div class="arrow-text">Case 02</div>
-    <div class="arrow-line"></div>
-  </div>
-
-  <!-- PAIR 2 -->
-  <div class="ba-pair">
-    <div class="ba-card fade-left">
-      <span class="ba-tag before">Before</span>
-      <img src="IMG_5029-removebg-preview.png" alt="Before rebuild angle 2">
-      <div class="ba-info">
-        <div class="ba-info-label">Before · Case 02</div>
-        <div class="ba-info-title">Client Rebuild</div>
-        <div class="ba-info-desc">Loose components, poor airflow, worn hardware throughout.</div>
-      </div>
-    </div>
-    <div class="ba-card fade-right">
-      <span class="ba-tag after">After</span>
-      <img src="IMG_5066-removebg-preview.png" alt="After rebuild RGB">
-      <div class="ba-info">
-        <div class="ba-info-label">After · Case 02</div>
-        <div class="ba-info-title">Full Rebuild + RGB</div>
-        <div class="ba-info-desc">Triple cyan ARGB fans, MSI RTX, optimized airflow, stress tested.</div>
-      </div>
-    </div>
+    <div class="stat-label">Hidden fees or<br>part markups. Ever.</div>
   </div>
 </div>
 
 <div class="divider"></div>
 
-<!-- CTA -->
+<!-- ── SECTION INTRO ── -->
+<div class="section-intro">
+  <div>
+    <p class="section-label">Client rebuild</p>
+    <h2 class="section-title" style="margin-bottom:0;">Before &<br>After.</h2>
+  </div>
+  <p>Two complete system overhauls. Documented start to finish. This is what the work actually looks like — not a render, not a stock photo.</p>
+</div>
+
+<!-- ── BUILDS ── -->
+<div class="ba-section">
+
+  <!-- CASE 01 -->
+  <div class="case-label">Case 01 — Full Rebuild</div>
+  <div class="ba-pair">
+    <div class="ba-card">
+      <span class="ba-tag before">Before</span>
+      <div class="ba-img-wrap">
+        <img src="IMG_5026-removebg-preview.png" alt="Before rebuild case 01">
+      </div>
+      <div class="ba-info">
+        <div>
+          <div class="ba-info-title">Disorganized build</div>
+          <div class="ba-info-desc">Loose cables, aging thermal paste, dusty internals throughout.</div>
+        </div>
+        <div class="ba-info-arrow">→</div>
+      </div>
+    </div>
+    <div class="ba-card">
+      <span class="ba-tag after">After</span>
+      <div class="ba-img-wrap">
+        <img src="IMG_5060-removebg-preview.png" alt="After rebuild case 01">
+      </div>
+      <div class="ba-info">
+        <div>
+          <div class="ba-info-title">Full rebuild complete</div>
+          <div class="ba-info-desc">New motherboard, clean routing, MSI GeForce RTX installed & stress tested.</div>
+        </div>
+        <div class="ba-info-arrow">✓</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE 02 -->
+  <div class="case-label">Case 02 — Rebuild + RGB</div>
+  <div class="ba-pair">
+    <div class="ba-card">
+      <span class="ba-tag before">Before</span>
+      <div class="ba-img-wrap">
+        <img src="IMG_5029-removebg-preview.png" alt="Before rebuild case 02">
+      </div>
+      <div class="ba-info">
+        <div>
+          <div class="ba-info-title">Poor airflow config</div>
+          <div class="ba-info-desc">Loose components, worn hardware, zero airflow optimization.</div>
+        </div>
+        <div class="ba-info-arrow">→</div>
+      </div>
+    </div>
+    <div class="ba-card">
+      <span class="ba-tag after">After</span>
+      <div class="ba-img-wrap">
+        <img src="IMG_5066-removebg-preview.png" alt="After rebuild case 02 RGB">
+      </div>
+      <div class="ba-info">
+        <div>
+          <div class="ba-info-title">Rebuild + ARGB setup</div>
+          <div class="ba-info-desc">Triple cyan ARGB fans, MSI RTX, optimized airflow, stress tested and signed off.</div>
+        </div>
+        <div class="ba-info-arrow">✓</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── STATEMENT ── -->
+<div class="divider"></div>
+<div class="statement-section">
+  <div class="statement-bg"></div>
+  <div class="statement-text">
+    <span class="statement-line"><span>Every detail.</span></span>
+    <span class="statement-line"><span>Every <span class="dim">cable.</span></span></span>
+    <span class="statement-line"><span>Built <span class="dim">right.</span></span></span>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- ── CTA ── -->
 <div class="cta-section">
-  <p class="section-label fade-up" style="justify-content:center;">Ready?</p>
-  <h2 class="fade-up d1">Your build<br>could be next.</h2>
-  <p class="fade-up d2">In-person, NYC only. No shipping. No mystery fees.</p>
-  <div class="cta-btns fade-up d3">
+  <p class="cta-eyebrow">Your turn</p>
+  <h2 class="cta-heading">Your build<br>could be next.</h2>
+  <p class="cta-sub">In-person · NYC only · No hidden fees</p>
+  <div class="cta-btns">
     <a href="book.html" class="btn-primary">Book a service</a>
-    <a href="services.html" class="btn-ghost">View services</a>
+    <a href="services.html" class="btn-ghost">View services & pricing</a>
   </div>
 </div>
 
 <script>
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.12 });
+function checkAll() {
+  const vh = window.innerHeight;
 
-document.querySelectorAll('.fade-up, .fade-left, .fade-right').forEach(el => observer.observe(el));
+  // Stats
+  document.querySelectorAll('.stat-item').forEach((el, i) => {
+    const r = el.getBoundingClientRect();
+    if (r.top < vh * 0.88 && r.bottom > 0) {
+      setTimeout(() => el.classList.add('in-view'), i * 120);
+    }
+  });
+
+  // Section intro
+  const intro = document.querySelector('.section-intro');
+  if (intro) {
+    const r = intro.getBoundingClientRect();
+    if (r.top < vh * 0.88) intro.classList.add('in-view');
+  }
+
+  // Case labels
+  document.querySelectorAll('.case-label').forEach(el => {
+    const r = el.getBoundingClientRect();
+    if (r.top < vh * 0.9) el.classList.add('in-view');
+  });
+
+  // BA cards — both images in a pair reveal together
+  document.querySelectorAll('.ba-pair').forEach(pair => {
+    const r = pair.getBoundingClientRect();
+    if (r.top < vh * 0.85) {
+      pair.querySelectorAll('.ba-card').forEach((card, i) => {
+        setTimeout(() => card.classList.add('in-view'), i * 150);
+      });
+    }
+  });
+
+  // Statement section
+  const stmt = document.querySelector('.statement-section');
+  if (stmt) {
+    const r = stmt.getBoundingClientRect();
+    if (r.top < vh * 0.85) stmt.classList.add('in-view');
+  }
+
+  // CTA
+  const cta = document.querySelector('.cta-section');
+  if (cta) {
+    const r = cta.getBoundingClientRect();
+    if (r.top < vh * 0.88) cta.classList.add('in-view');
+  }
+}
+
+window.addEventListener('scroll', checkAll, { passive: true });
+setTimeout(checkAll, 200);
 </script>
 </body>
 </html>
