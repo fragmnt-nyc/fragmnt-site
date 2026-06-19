@@ -4,8 +4,7 @@ const NAV_HTML = `
   <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">&#9776;</button>
   <ul class="nav-links" id="navLinks">
     <li><a href="index.html">Home</a></li>
-    <li><a href="services.html">Services</a></li>
-    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="services.html">Services & Pricing</a></li>
     <li><a href="showcase.html">Showcase</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="contact.html">Contact</a></li>
