@@ -6,6 +6,7 @@ const NAV_HTML = `
     <li><a href="index.html">Home</a></li>
     <li><a href="services.html">Services & Pricing</a></li>
     <li><a href="showcase.html">Showcase</a></li>
+    <li><a href="reviews.html">Reviews</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="contact.html">Contact</a></li>
     <li><a href="book.html" class="nav-cta">Book Now</a></li>
