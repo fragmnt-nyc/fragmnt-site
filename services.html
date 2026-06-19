@@ -4,231 +4,867 @@
 <meta charset="UTF-8">
 <link rel="icon" type="image/png" href="FRAG1.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Services — FRAGMNT</title>
+<title>Services & Pricing — FRAGMNT</title>
 <link rel="stylesheet" href="shared.css">
 <script src="shared.js"></script>
 <style>
-  .page-hero{padding:10rem 3rem 4rem;max-width:1100px;margin:0 auto;}
-  .page-hero h1{font-size:clamp(2.5rem,5vw,4.5rem);font-weight:600;letter-spacing:-0.03em;color:#fff;line-height:1.05;margin-bottom:1rem;}
-  .page-hero p{font-size:1rem;color:#888;max-width:480px;line-height:1.7;}
+  :root {
+    --mono: 'Space Mono', monospace;
+    --ash: #888;
+    --ash-dim: #555;
+    --line: rgba(255,255,255,0.07);
+    --line-strong: rgba(255,255,255,0.14);
+  }
 
-  .services-section{max-width:1100px;margin:0 auto;padding:3rem 3rem 6rem;}
+  /* ── HERO ── */
+  .s-hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 3rem 6rem;
+    position: relative;
+    overflow: hidden;
+  }
 
-  .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;}
-  .service-card{background:#111;padding:2rem;transition:background 0.2s;display:flex;flex-direction:column;}
-  .service-card:hover{background:#181818;}
-  .service-card.featured{background:#151515;}
-  .service-icon{font-size:1.5rem;margin-bottom:1rem;}
-  .service-name{font-size:1.05rem;font-weight:600;color:#fff;margin-bottom:0.4rem;}
-  .service-desc{font-size:0.875rem;color:#888;line-height:1.7;margin-bottom:1.25rem;flex:1;}
-  .service-price{font-family:'Space Mono',monospace;font-size:1.15rem;font-weight:700;color:#fff;}
-  .service-note{font-size:0.75rem;color:#888;margin-top:0.2rem;margin-bottom:1.25rem;}
-  .service-includes{margin-bottom:1.25rem;}
-  .service-includes p{font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:#888;margin-bottom:0.5rem;}
-  .service-includes ul{list-style:none;display:flex;flex-direction:column;gap:0.3rem;}
-  .service-includes li{font-size:0.82rem;color:#aaa;display:flex;align-items:center;gap:0.5rem;}
-  .service-includes li::before{content:'—';color:#555;font-size:0.7rem;}
-  .service-book-btn{width:100%;background:transparent;border:1px solid rgba(255,255,255,0.18);color:#888;padding:0.65rem 1rem;border-radius:4px;font-family:'Space Grotesk',sans-serif;font-size:0.82rem;font-weight:500;cursor:pointer;transition:border-color 0.2s,color 0.2s,background 0.2s;text-align:center;text-decoration:none;display:block;}
-  .service-book-btn:hover{border-color:#fff;color:#fff;background:rgba(255,255,255,0.04);}
-  .service-book-btn.primary-btn{background:#fff;color:#000;border-color:#fff;font-weight:600;}
-  .service-book-btn.primary-btn:hover{opacity:0.85;}
+  .hero-bg-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--mono);
+    font-size: clamp(10rem, 30vw, 28rem);
+    font-weight: 700;
+    color: rgba(255,255,255,0.025);
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    white-space: nowrap;
+  }
 
-  .compare-section{max-width:1100px;margin:0 auto;padding:4rem 3rem 6rem;}
-  .compare-table{width:100%;border-collapse:collapse;font-size:0.875rem;}
-  .compare-table th{text-align:left;font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:#888;padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.08);}
-  .compare-table td{padding:0.9rem 1rem;border-bottom:1px solid rgba(255,255,255,0.05);color:#aaa;vertical-align:top;}
-  .compare-table td:first-child{color:#fff;font-weight:500;}
-  .compare-table tr:hover td{background:rgba(255,255,255,0.02);}
-  .price-cell{font-family:'Space Mono',monospace;color:#fff !important;font-weight:700;}
-  .tag{display:inline-block;font-size:0.7rem;background:rgba(255,255,255,0.07);color:#888;border-radius:3px;padding:0.2rem 0.5rem;letter-spacing:0.05em;}
-  .tag.green{background:rgba(100,200,100,0.1);color:#6dc96d;}
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+  }
 
-  @media(max-width:768px){
-    .page-hero{padding:8rem 1.5rem 3rem;}
-    .services-section{padding:2rem 1.5rem 5rem;}
-    .compare-section{padding:3rem 1.5rem 5rem;}
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: riseIn 0.7s cubic-bezier(.2,.7,.3,1) 0.2s forwards;
+  }
+
+  .hero-tag::before { content: ''; display: block; width: 24px; height: 1px; background: var(--ash-dim); }
+
+  .hero-h1 {
+    font-size: clamp(3.5rem, 9vw, 9rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    color: #fff;
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: riseIn 0.9s cubic-bezier(.2,.7,.3,1) 0.35s forwards;
+  }
+
+  .hero-h1 em { font-style: normal; color: rgba(255,255,255,0.22); }
+
+  .hero-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: riseIn 0.7s cubic-bezier(.2,.7,.3,1) 0.55s forwards;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    color: var(--ash);
+    max-width: 380px;
+    line-height: 1.8;
+  }
+
+  .hero-scroll-hint {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: var(--ash-dim);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: #fff;
+    animation: scanLine 2s ease-in-out infinite 1.5s;
+  }
+
+  @keyframes scanLine { 0%{left:-100%} 100%{left:100%} }
+  @keyframes riseIn { to { opacity:1; transform:translateY(0); } }
+
+  /* ── HORIZONTAL TICKER ── */
+  .ticker-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 0.9rem 0;
+    background: rgba(255,255,255,0.015);
+  }
+
+  .ticker-track {
+    display: flex;
+    gap: 3rem;
+    width: max-content;
+    animation: ticker 25s linear infinite;
+  }
+
+  .ticker-item {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .ticker-item::after { content: '·'; color: rgba(255,255,255,0.2); }
+
+  @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* ── SERVICE LIST ── */
+  .svc-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 6rem 3rem;
+  }
+
+  .svc-row {
+    display: grid;
+    grid-template-columns: 3fr 1.5fr 1fr;
+    align-items: start;
+    gap: 2rem;
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--line);
+    position: relative;
+    cursor: default;
+    transition: background 0.3s;
+  }
+
+  .svc-row::before {
+    content: '';
+    position: absolute;
+    left: -3rem; right: -3rem;
+    top: 0; bottom: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.4s cubic-bezier(.2,.7,.3,1);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .svc-row:hover::before { background: rgba(255,255,255,0.025); }
+
+  .svc-row > * { position: relative; z-index: 1; }
+
+  /* Row entrance */
+  .svc-row {
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+      opacity 0.7s cubic-bezier(.2,.7,.3,1),
+      transform 0.7s cubic-bezier(.2,.7,.3,1),
+      background 0.3s;
+  }
+
+  .svc-row.in-view { opacity: 1; transform: translateY(0); }
+  .svc-row:nth-child(1).in-view { transition-delay: 0s; }
+  .svc-row:nth-child(2).in-view { transition-delay: 0.07s; }
+  .svc-row:nth-child(3).in-view { transition-delay: 0.14s; }
+  .svc-row:nth-child(4).in-view { transition-delay: 0.21s; }
+  .svc-row:nth-child(5).in-view { transition-delay: 0.28s; }
+  .svc-row:nth-child(6).in-view { transition-delay: 0.35s; }
+
+  .svc-num {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    color: var(--ash-dim);
+    margin-bottom: 0.75rem;
+  }
+
+  .svc-name {
+    font-size: clamp(1.3rem, 2.5vw, 2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    transition: letter-spacing 0.4s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .svc-row:hover .svc-name { letter-spacing: 0; }
+
+  .svc-desc {
+    font-size: 0.85rem;
+    color: var(--ash);
+    line-height: 1.7;
+    max-width: 38ch;
+  }
+
+  /* Expandable includes */
+  .svc-includes {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(.2,.7,.3,1), opacity 0.4s;
+    opacity: 0;
+  }
+
+  .svc-row:hover .svc-includes {
+    max-height: 200px;
+    opacity: 1;
+  }
+
+  .svc-includes ul {
+    list-style: none;
+    margin-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .svc-includes li {
+    font-size: 0.78rem;
+    color: var(--ash-dim);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .svc-includes li::before { content: '—'; font-size: 0.65rem; }
+
+  .svc-middle {
+    padding-top: 0.2rem;
+  }
+
+  .svc-tag {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    margin-bottom: 0.5rem;
+  }
+
+  .svc-type {
+    font-size: 0.82rem;
+    color: var(--ash);
+  }
+
+  .badge-best {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: #fff;
+    color: #000;
+    padding: 0.2rem 0.6rem;
+    border-radius: 2px;
+    font-weight: 700;
+    margin-top: 0.5rem;
+  }
+
+  .svc-price-col {
+    text-align: right;
+    padding-top: 0.2rem;
+  }
+
+  .svc-price {
+    font-family: var(--mono);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.1;
+    transition: transform 0.3s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .svc-row:hover .svc-price { transform: scale(1.06); }
+
+  .svc-unit {
+    font-size: 0.7rem;
+    color: var(--ash-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  .svc-book-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--ash-dim);
+    text-decoration: none;
+    margin-top: 0.75rem;
+    letter-spacing: 0.08em;
+    transition: color 0.2s, gap 0.3s;
+    font-family: var(--mono);
+  }
+
+  .svc-book-link:hover { color: #fff; gap: 0.7rem; }
+
+  /* ── COMPARISON ── */
+  .cmp-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 3rem 5rem;
+  }
+
+  .cmp-header {
+    display: grid;
+    grid-template-columns: 2fr repeat(4, 1fr);
+    gap: 1rem;
+    padding: 0 0 1rem;
+    border-bottom: 1px solid var(--line-strong);
+    margin-bottom: 0;
+  }
+
+  .cmp-header-cell {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    text-align: right;
+  }
+
+  .cmp-header-cell:first-child { text-align: left; }
+  .cmp-header-cell.us { color: #fff; font-weight: 700; }
+
+  .cmp-row {
+    display: grid;
+    grid-template-columns: 2fr repeat(4, 1fr);
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.6s cubic-bezier(.2,.7,.3,1), transform 0.6s cubic-bezier(.2,.7,.3,1), background 0.2s;
+  }
+
+  .cmp-row.in-view { opacity: 1; transform: translateX(0); }
+  .cmp-row:nth-child(2).in-view { transition-delay: 0.05s; }
+  .cmp-row:nth-child(3).in-view { transition-delay: 0.1s; }
+  .cmp-row:nth-child(4).in-view { transition-delay: 0.15s; }
+  .cmp-row:nth-child(5).in-view { transition-delay: 0.2s; }
+
+  .cmp-row:hover { background: rgba(255,255,255,0.02); }
+
+  .cmp-cell {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    color: var(--ash);
+    text-align: right;
+  }
+
+  .cmp-cell:first-child {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    text-align: left;
+  }
+
+  .cmp-cell.us {
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  .cmp-cell.save {
+    text-align: right;
+  }
+
+  .save-num {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    display: block;
+  }
+
+  .save-bar-wrap {
+    height: 2px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 1px;
+    margin-top: 5px;
+    overflow: hidden;
+  }
+
+  .save-bar {
+    height: 100%;
+    background: #fff;
+    border-radius: 1px;
+    width: 0;
+    transition: width 1.2s cubic-bezier(.2,.7,.3,1);
+  }
+
+  /* ── PROMISE STRIP ── */
+  .promise-strip {
+    max-width: 1100px;
+    margin: 0 auto 6rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .promise-strip.in-view { opacity: 1; transform: translateY(0); }
+
+  .promise-item {
+    padding: 2rem 2.5rem;
+    border-right: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .promise-item:last-child { border-right: none; }
+
+  .promise-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.4s;
+  }
+
+  .promise-item:hover::after { background: rgba(255,255,255,0.03); }
+
+  .promise-num {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.2em;
+    color: var(--ash-dim);
+    margin-bottom: 0.75rem;
+  }
+
+  .promise-heading {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.01em;
+  }
+
+  .promise-body {
+    font-size: 0.8rem;
+    color: var(--ash);
+    line-height: 1.7;
+  }
+
+  /* ── CTA ── */
+  .cta-band {
+    background: #fff;
+    padding: 4rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s cubic-bezier(.2,.7,.3,1), transform 0.8s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .cta-band.in-view { opacity: 1; transform: translateY(0); }
+
+  .cta-band h2 {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: #000;
+    line-height: 1.1;
+  }
+
+  .cta-band-btn {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 0.9rem 2.5rem;
+    border-radius: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+  }
+
+  .cta-band-btn:hover { opacity: 0.8; }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width: 768px) {
+    .s-hero { padding: 0 1.5rem 5rem; }
+    .svc-section, .cmp-section { padding: 4rem 1.5rem; }
+    .svc-row { grid-template-columns: 1fr 1fr; }
+    .svc-price-col { text-align: left; }
+    .cmp-section { overflow-x: auto; }
+    .cmp-header, .cmp-row { grid-template-columns: 1.5fr repeat(4, 1fr); min-width: 580px; }
+    .promise-strip { grid-template-columns: 1fr; }
+    .promise-item { border-right: none; border-bottom: 1px solid var(--line); }
+    .promise-item:last-child { border-bottom: none; }
+    .cta-band { padding: 3rem 1.5rem; }
   }
 </style>
 </head>
 <body>
 
-<div class="page-hero">
-  <p class="section-label">What we offer</p>
-  <h1>Services &<br>Pricing</h1>
-  <p>Every service is done in-person in NYC. No shipping. No mystery fees. You know exactly what you're paying before we start.</p>
-</div>
-
-<div class="divider"></div>
-
-<div class="services-section">
-  <div class="services-grid">
-
-    <div class="service-card scale-in">
-      <div class="service-icon">🖥️</div>
-      <p class="service-name">Custom PC Build</p>
-      <p class="service-desc">We source the parts and assemble everything — cable management, BIOS setup, driver installs, and a full stress test before handoff.</p>
-      <p class="service-price">$80 – $200</p>
-      <p class="service-note">Labor only · we source parts</p>
-      <div class="service-includes">
-        <p>Includes</p>
-        <ul>
-          <li>Full assembly & cable management</li>
-          <li>BIOS configuration</li>
-          <li>OS + driver installation</li>
-          <li>Stress test & sign-off</li>
-        </ul>
+<!-- ── HERO ── -->
+<div class="s-hero">
+  <div class="hero-bg-number">06</div>
+  <div class="hero-content">
+    <p class="hero-tag">Services & Pricing — NYC</p>
+    <h1 class="hero-h1">What we do.<br><em>What it costs.</em></h1>
+    <div class="hero-bottom">
+      <p class="hero-desc">Six services. Transparent rates. No hidden fees, no markups on parts — just honest work done right.</p>
+      <div class="hero-scroll-hint">
+        <div class="scroll-line"></div>
+        Scroll to explore
       </div>
-      <a href="book.html?service=Custom+PC+Build" class="service-book-btn">Book this →</a>
     </div>
-
-    <div class="service-card scale-in">
-      <div class="service-icon">🔧</div>
-      <p class="service-name">Repairs & Rebuild</p>
-      <p class="service-desc">BSODs, crashes, GPU artifacting, PSU failures — diagnosed and fixed. Full rebuilds handled too if you need a fresh start.</p>
-      <p class="service-price">$55 – $75 / hr</p>
-      <p class="service-note">Hourly rate · parts extra if needed</p>
-      <div class="service-includes">
-        <p>Common repairs</p>
-        <ul>
-          <li>GPU / PSU failures</li>
-          <li>BSOD diagnosis & fix</li>
-          <li>Motherboard swaps</li>
-          <li>Full system rebuilds</li>
-        </ul>
-      </div>
-      <a href="book.html?service=Repairs+%26+Rebuild" class="service-book-btn">Book this →</a>
-    </div>
-
-    <div class="service-card scale-in">
-      <div class="service-icon">🔍</div>
-      <p class="service-name">Diagnostics</p>
-      <p class="service-desc">Full system inspection across GPU, CPU, RAM, PSU, and thermals. You get a clear breakdown of what's wrong and how to fix it.</p>
-      <p class="service-price">$30 – $75</p>
-      <p class="service-note">Basic check-up or full system report</p>
-      <div class="service-includes">
-        <p>Includes</p>
-        <ul>
-          <li>Voltage & thermal monitoring</li>
-          <li>RAM & storage health check</li>
-          <li>Written summary of findings</li>
-          <li>Repair estimate if needed</li>
-        </ul>
-      </div>
-      <a href="book.html?service=Diagnostics" class="service-book-btn">Book this →</a>
-    </div>
-
-    <div class="service-card scale-in">
-      <div class="service-icon">🧹</div>
-      <p class="service-name">PC Cleaning</p>
-      <p class="service-desc">Compressed air dust removal, thermal paste replacement, fan and heatsink cleaning. Your PC will run cooler and quieter.</p>
-      <p class="service-price">$40 – $100</p>
-      <p class="service-note">Basic clean or deep clean</p>
-      <div class="service-includes">
-        <p>Includes</p>
-        <ul>
-          <li>Dust removal (interior + fans)</li>
-          <li>Thermal paste replacement</li>
-          <li>Cable tidying</li>
-          <li>Post-clean temp check</li>
-        </ul>
-      </div>
-      <a href="book.html?service=PC+Cleaning" class="service-book-btn">Book this →</a>
-    </div>
-
-    <div class="service-card scale-in">
-      <div class="service-icon">💬</div>
-      <p class="service-name">Consultation</p>
-      <p class="service-desc">Not sure what parts to buy? Got a problem you can't diagnose? Talk it through — first 15 minutes are on me, no commitment needed.</p>
-      <p class="service-price">$25 – $50 / hr</p>
-      <p class="service-note">First 15 min free</p>
-      <div class="service-includes">
-        <p>Good for</p>
-        <ul>
-          <li>Part picking & budget advice</li>
-          <li>Pre-build planning</li>
-          <li>Upgrade recommendations</li>
-          <li>General troubleshooting advice</li>
-        </ul>
-      </div>
-      <a href="book.html?service=Consultation" class="service-book-btn">Book this →</a>
-    </div>
-
-    <div class="service-card featured">
-      <div class="service-icon">📦</div>
-      <p class="service-name">Tune-Up Bundle</p>
-      <p class="service-desc">Deep cleaning plus full diagnostics in one visit. Best value if your PC's been sluggish, running hot, or just hasn't been touched in a while.</p>
-      <p class="service-price">$80 flat</p>
-      <p class="service-note">Best value · cleaning + diagnostics</p>
-      <div class="service-includes">
-        <p>Everything in</p>
-        <ul>
-          <li>Full deep clean</li>
-          <li>Complete diagnostics</li>
-          <li>Thermal paste swap</li>
-          <li>Written health report</li>
-        </ul>
-      </div>
-      <a href="book.html?service=Tune-Up+Bundle" class="service-book-btn primary-btn">Book this →</a>
-    </div>
-
   </div>
 </div>
 
-<div class="divider"></div>
-
-<div class="compare-section">
-  <p class="section-label">Pricing overview</p>
-  <h2 class="section-title">Compare services</h2>
-  <table class="compare-table fade-up">
-    <thead>
-      <tr>
-        <th>Service</th>
-        <th>Price</th>
-        <th>Turnaround</th>
-        <th>Best for</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Custom PC Build</td>
-        <td class="price-cell">$80 – $200</td>
-        <td>Same day – 2 days</td>
-        <td>New build, first-time builders</td>
-      </tr>
-      <tr>
-        <td>Repairs & Rebuild</td>
-        <td class="price-cell">$55 – $75 / hr</td>
-        <td>Varies by scope</td>
-        <td>Crashes, failures, rebuilds</td>
-      </tr>
-      <tr>
-        <td>Diagnostics</td>
-        <td class="price-cell">$30 – $75</td>
-        <td>Same day</td>
-        <td>Unknown issues, pre-repair check</td>
-      </tr>
-      <tr>
-        <td>PC Cleaning</td>
-        <td class="price-cell">$40 – $100</td>
-        <td>Same day</td>
-        <td>Overheating, loud fans</td>
-      </tr>
-      <tr>
-        <td>Consultation</td>
-        <td class="price-cell">$25 – $50 / hr</td>
-        <td>Flexible</td>
-        <td>Part picking, planning, advice</td>
-      </tr>
-      <tr>
-        <td>Tune-Up Bundle <span class="tag green">Best value</span></td>
-        <td class="price-cell">$80 flat</td>
-        <td>Same day</td>
-        <td>General maintenance, aging PCs</td>
-      </tr>
-    </tbody>
-  </table>
+<!-- ── TICKER ── -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item">Custom PC Build</span>
+    <span class="ticker-item">Repairs & Rebuild</span>
+    <span class="ticker-item">Diagnostics</span>
+    <span class="ticker-item">PC Cleaning</span>
+    <span class="ticker-item">Consultation</span>
+    <span class="ticker-item">Tune-Up Bundle</span>
+    <span class="ticker-item">New York City</span>
+    <span class="ticker-item">No Hidden Fees</span>
+    <span class="ticker-item">Custom PC Build</span>
+    <span class="ticker-item">Repairs & Rebuild</span>
+    <span class="ticker-item">Diagnostics</span>
+    <span class="ticker-item">PC Cleaning</span>
+    <span class="ticker-item">Consultation</span>
+    <span class="ticker-item">Tune-Up Bundle</span>
+    <span class="ticker-item">New York City</span>
+    <span class="ticker-item">No Hidden Fees</span>
+  </div>
 </div>
 
-<script>// nav auto-injected by shared.js</script>
+<!-- ── SERVICES LIST ── -->
+<div class="svc-section">
+  <div class="svc-row">
+    <div>
+      <div class="svc-num">01</div>
+      <div class="svc-name">Custom PC Build</div>
+      <div class="svc-desc">We source the parts and assemble everything — cable management, BIOS setup, driver installs, and a full stress test before handoff.</div>
+      <div class="svc-includes">
+        <ul>
+          <li>Full assembly & cable management</li>
+          <li>BIOS configuration & OS install</li>
+          <li>Driver installation & stress test</li>
+        </ul>
+      </div>
+      <a href="book.html?service=Custom+PC+Build" class="svc-book-link">Book this →</a>
+    </div>
+    <div class="svc-middle">
+      <div class="svc-tag">Category</div>
+      <div class="svc-type">Build</div>
+    </div>
+    <div class="svc-price-col">
+      <div class="svc-price">$80–$200</div>
+      <div class="svc-unit">labor only</div>
+    </div>
+  </div>
+
+  <div class="svc-row">
+    <div>
+      <div class="svc-num">02</div>
+      <div class="svc-name">Repairs & Rebuild</div>
+      <div class="svc-desc">BSODs, crashes, GPU artifacting, PSU failures — diagnosed and fixed. Full rebuilds handled too.</div>
+      <div class="svc-includes">
+        <ul>
+          <li>GPU / PSU failure diagnosis</li>
+          <li>BSOD resolution</li>
+          <li>Full motherboard swaps</li>
+        </ul>
+      </div>
+      <a href="book.html?service=Repairs+%26+Rebuild" class="svc-book-link">Book this →</a>
+    </div>
+    <div class="svc-middle">
+      <div class="svc-tag">Category</div>
+      <div class="svc-type">Repair</div>
+    </div>
+    <div class="svc-price-col">
+      <div class="svc-price">$55–$75</div>
+      <div class="svc-unit">per hour</div>
+    </div>
+  </div>
+
+  <div class="svc-row">
+    <div>
+      <div class="svc-num">03</div>
+      <div class="svc-name">Diagnostics</div>
+      <div class="svc-desc">Full system inspection — GPU, CPU, RAM, PSU, thermals. Written summary of findings with a repair estimate.</div>
+      <div class="svc-includes">
+        <ul>
+          <li>Voltage & thermal monitoring</li>
+          <li>RAM & storage health check</li>
+          <li>Written findings report</li>
+        </ul>
+      </div>
+      <a href="book.html?service=Diagnostics" class="svc-book-link">Book this →</a>
+    </div>
+    <div class="svc-middle">
+      <div class="svc-tag">Category</div>
+      <div class="svc-type">Diagnostic</div>
+    </div>
+    <div class="svc-price-col">
+      <div class="svc-price">$30–$75</div>
+      <div class="svc-unit">basic or full</div>
+    </div>
+  </div>
+
+  <div class="svc-row">
+    <div>
+      <div class="svc-num">04</div>
+      <div class="svc-name">PC Cleaning</div>
+      <div class="svc-desc">Dust removal, thermal paste replacement, fan and heatsink cleaning. Runs cooler, runs quieter.</div>
+      <div class="svc-includes">
+        <ul>
+          <li>Full dust removal</li>
+          <li>Thermal paste replacement</li>
+          <li>Post-clean temp verification</li>
+        </ul>
+      </div>
+      <a href="book.html?service=PC+Cleaning" class="svc-book-link">Book this →</a>
+    </div>
+    <div class="svc-middle">
+      <div class="svc-tag">Category</div>
+      <div class="svc-type">Maintenance</div>
+    </div>
+    <div class="svc-price-col">
+      <div class="svc-price">$40–$100</div>
+      <div class="svc-unit">basic or deep</div>
+    </div>
+  </div>
+
+  <div class="svc-row">
+    <div>
+      <div class="svc-num">05</div>
+      <div class="svc-name">Consultation</div>
+      <div class="svc-desc">Part picking, build planning, upgrade advice. Not sure what you need? First 15 minutes are on us.</div>
+      <div class="svc-includes">
+        <ul>
+          <li>Budget & parts advice</li>
+          <li>Upgrade recommendations</li>
+          <li>First 15 min free</li>
+        </ul>
+      </div>
+      <a href="book.html?service=Consultation" class="svc-book-link">Book this →</a>
+    </div>
+    <div class="svc-middle">
+      <div class="svc-tag">Category</div>
+      <div class="svc-type">Advisory</div>
+    </div>
+    <div class="svc-price-col">
+      <div class="svc-price">$25–$50</div>
+      <div class="svc-unit">per hour</div>
+    </div>
+  </div>
+
+  <div class="svc-row">
+    <div>
+      <div class="svc-num">06</div>
+      <div class="svc-name">Tune-Up Bundle</div>
+      <div class="svc-desc">Deep cleaning plus full diagnostics in one visit. Best value if your PC's been sluggish or running hot.</div>
+      <div class="svc-includes">
+        <ul>
+          <li>Full deep clean</li>
+          <li>Complete diagnostics</li>
+          <li>Written health report</li>
+        </ul>
+      </div>
+      <a href="book.html?service=Tune-Up+Bundle" class="svc-book-link">Book this →</a>
+      <span class="badge-best">Most Booked</span>
+    </div>
+    <div class="svc-middle">
+      <div class="svc-tag">Category</div>
+      <div class="svc-type">Bundle</div>
+    </div>
+    <div class="svc-price-col">
+      <div class="svc-price">$80</div>
+      <div class="svc-unit">flat rate</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── COMPARISON ── -->
+<div class="divider"></div>
+<div class="cmp-section">
+  <div style="max-width:1100px;margin:0 auto 2.5rem;opacity:0;transform:translateY(20px);transition:all 0.7s cubic-bezier(.2,.7,.3,1);" class="cmp-intro">
+    <p class="section-label">Market comparison</p>
+    <h2 class="section-title" style="margin-bottom:0.5rem;">Same work.<br>A fraction of the cost.</h2>
+    <p style="font-size:0.85rem;color:var(--ash-dim);">Competitor rates based on published 2026 NYC-area pricing.</p>
+  </div>
+
+  <div class="cmp-header">
+    <div class="cmp-header-cell">Service</div>
+    <div class="cmp-header-cell">Geek Squad</div>
+    <div class="cmp-header-cell">Micro Center</div>
+    <div class="cmp-header-cell us">FRAGMNT</div>
+    <div class="cmp-header-cell">You Save</div>
+  </div>
+
+  <div class="cmp-row">
+    <div class="cmp-cell">Diagnostics</div>
+    <div class="cmp-cell">$99–$150</div>
+    <div class="cmp-cell">$50–$80</div>
+    <div class="cmp-cell us">$30–$75</div>
+    <div class="cmp-cell save"><span class="save-num">80%</span><div class="save-bar-wrap"><div class="save-bar" data-pct="80"></div></div></div>
+  </div>
+  <div class="cmp-row">
+    <div class="cmp-cell">PC Cleaning</div>
+    <div class="cmp-cell">$80–$150</div>
+    <div class="cmp-cell">$60–$120</div>
+    <div class="cmp-cell us">$40–$100</div>
+    <div class="cmp-cell save"><span class="save-num">50%</span><div class="save-bar-wrap"><div class="save-bar" data-pct="50"></div></div></div>
+  </div>
+  <div class="cmp-row">
+    <div class="cmp-cell">Custom PC Build</div>
+    <div class="cmp-cell">$300+</div>
+    <div class="cmp-cell">$250+</div>
+    <div class="cmp-cell us">$80–$200</div>
+    <div class="cmp-cell save"><span class="save-num">73%</span><div class="save-bar-wrap"><div class="save-bar" data-pct="73"></div></div></div>
+  </div>
+  <div class="cmp-row">
+    <div class="cmp-cell">Repairs /hr</div>
+    <div class="cmp-cell">$100/hr</div>
+    <div class="cmp-cell">$80–$100/hr</div>
+    <div class="cmp-cell us">$55–$75/hr</div>
+    <div class="cmp-cell save"><span class="save-num">45%</span><div class="save-bar-wrap"><div class="save-bar" data-pct="45"></div></div></div>
+  </div>
+</div>
+
+<!-- ── PROMISE STRIP ── -->
+<div style="max-width:1100px;margin:0 auto;padding:0 3rem 3rem;">
+  <div class="promise-strip">
+    <div class="promise-item">
+      <div class="promise-num">01</div>
+      <div class="promise-heading">Transparent pricing</div>
+      <div class="promise-body">You know exactly what you're paying before we touch anything.</div>
+    </div>
+    <div class="promise-item">
+      <div class="promise-num">02</div>
+      <div class="promise-heading">We source the parts</div>
+      <div class="promise-body">We never mark up parts. What you pay is what they cost.</div>
+    </div>
+    <div class="promise-item">
+      <div class="promise-num">03</div>
+      <div class="promise-heading">In-person only</div>
+      <div class="promise-body">New York City. No shipping. You deal with us directly, always.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA BAND ── -->
+<div class="cta-band">
+  <h2>Ready to get<br>started?</h2>
+  <a href="book.html" class="cta-band-btn">Book a service →</a>
+</div>
+
+<script>
+// ── SCROLL ANIMATIONS
+function checkAll() {
+  const vh = window.innerHeight;
+
+  // Service rows — staggered on entry only
+  document.querySelectorAll('.svc-row').forEach((el, i) => {
+    const r = el.getBoundingClientRect();
+    if (r.top < vh * 0.9 && r.bottom > 0) {
+      setTimeout(() => el.classList.add('in-view'), i * 70);
+    }
+  });
+
+  // Comparison rows — slide in from left
+  document.querySelectorAll('.cmp-row').forEach((el, i) => {
+    const r = el.getBoundingClientRect();
+    if (r.top < vh * 0.9 && r.bottom > 0) {
+      setTimeout(() => {
+        el.classList.add('in-view');
+        // Animate savings bars
+        el.querySelectorAll('.save-bar').forEach(b => {
+          b.style.width = b.dataset.pct + '%';
+        });
+      }, i * 80);
+    }
+  });
+
+  // Comparison intro
+  const intro = document.querySelector('.cmp-intro');
+  if (intro) {
+    const r = intro.getBoundingClientRect();
+    if (r.top < vh * 0.88) {
+      intro.style.opacity = '1';
+      intro.style.transform = 'translateY(0)';
+    }
+  }
+
+  // Promise strip & CTA
+  ['.promise-strip', '.cta-band'].forEach(sel => {
+    const el = document.querySelector(sel);
+    if (el) {
+      const r = el.getBoundingClientRect();
+      if (r.top < vh * 0.88) el.classList.add('in-view');
+    }
+  });
+}
+
+window.addEventListener('scroll', checkAll, { passive: true });
+setTimeout(checkAll, 150);
+</script>
 </body>
 </html>
