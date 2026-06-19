@@ -109,8 +109,17 @@
           <input type="email" name="email" placeholder="your@email.com" required>
         </div>
         <div class="form-group">
-          <label>Service you're interested in</label>
-          <select name="service">
+          <label>Reason of Inquiry</label>
+          <select name="reason" id="reasonSelect" onchange="handleReason(this.value)" required>
+            <option value="">Select a reason</option>
+            <option value="order">Questions about an order</option>
+            <option value="service">Questions about a service</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group" id="serviceSelectGroup" style="display:none;">
+          <label>Which service?</label>
+          <select name="service" id="serviceSelect">
             <option value="">Select a service</option>
             <option>Custom PC Build</option>
             <option>Repairs &amp; Rebuild</option>
@@ -118,7 +127,6 @@
             <option>PC Cleaning</option>
             <option>Consultation</option>
             <option>Tune-Up Bundle</option>
-            <option>Not sure yet</option>
           </select>
         </div>
         <div class="form-group">
@@ -137,10 +145,44 @@
 </div>
 
 <script>
-function submitForm(e) {
+function handleReason(value) {
+  const serviceGroup = document.getElementById('serviceSelectGroup');
+  const serviceSelect = document.getElementById('serviceSelect');
+  if (value === 'service') {
+    serviceGroup.style.display = 'flex';
+    serviceSelect.required = true;
+  } else {
+    serviceGroup.style.display = 'none';
+    serviceSelect.required = false;
+    serviceSelect.value = '';
+  }
+}
+
+async function submitForm(e) {
   e.preventDefault();
-  document.getElementById('contactForm').style.display = 'none';
-  document.getElementById('formSuccess').style.display = 'block';
+  const form = document.getElementById('contactForm');
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  try {
+    const response = await fetch('https://formspree.io/f/mwvjdwgz', {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (response.ok) {
+      form.style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    } else {
+      btn.textContent = 'Something went wrong — try again';
+      btn.disabled = false;
+    }
+  } catch (err) {
+    btn.textContent = 'Network error — try again';
+    btn.disabled = false;
+  }
 }
 // nav auto-injected by shared.js
 </script>
