@@ -44,23 +44,22 @@
 
   /* ── SPLIT SCROLL EFFECT ── */
   .split-block {
-    transition: opacity 0.55s cubic-bezier(.4,0,.2,1), transform 0.55s cubic-bezier(.4,0,.2,1);
+    transition: opacity 0.6s cubic-bezier(.4,0,.2,1), transform 0.6s cubic-bezier(.4,0,.2,1);
     will-change: transform, opacity;
+    opacity: 0;
   }
 
   .split-block.split-left {
-    opacity: 0;
     transform: translateX(-80px);
   }
 
   .split-block.split-right {
-    opacity: 0;
     transform: translateX(80px);
   }
 
   .split-block.in-view {
-    opacity: 1 !important;
-    transform: translateX(0) !important;
+    opacity: 1;
+    transform: translateX(0);
   }
 </style>
 </head>
@@ -142,22 +141,26 @@
 </div>
 
 <script>
-// Split scroll — reassembles when in view, splits when out
-const splitObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('in-view');
+const blocks = document.querySelectorAll('.split-block');
+
+function checkBlocks() {
+  const vh = window.innerHeight;
+  blocks.forEach(el => {
+    const rect = el.getBoundingClientRect();
+    const inView = rect.top < vh * 0.88 && rect.bottom > vh * 0.12;
+    if (inView) {
+      el.classList.add('in-view');
     } else {
-      // Remove in-view so it re-animates when scrolled back
-      e.target.classList.remove('in-view');
+      el.classList.remove('in-view');
     }
   });
-}, {
-  threshold: 0.12,
-  rootMargin: '0px 0px -40px 0px'
-});
+}
 
-document.querySelectorAll('.split-block').forEach(el => splitObserver.observe(el));
+// Run on scroll and on load
+window.addEventListener('scroll', checkBlocks, { passive: true });
+window.addEventListener('resize', checkBlocks, { passive: true });
+// Small delay so nav is injected first
+setTimeout(checkBlocks, 100);
 // nav auto-injected by shared.js
 </script>
 </body>
