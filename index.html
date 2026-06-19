@@ -578,9 +578,57 @@
 
   .cta-band-btn:hover { opacity: 0.85; transform: translateY(-1px); }
 
-  /* ── RESPONSIVE ── */
-  @media(max-width: 768px) {
-    .hero { padding: 0 1.5rem 5rem; }
+  /* ── FLOATING CLOUD REVIEWS ── */
+  .cloud-reviews {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .cloud-review {
+    position: absolute;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    max-width: 260px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  .cloud-review.visible { opacity: 1; }
+
+  .cloud-review-stars {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 0.5rem;
+  }
+
+  .cloud-star {
+    font-size: 0.6rem;
+    color: #fff;
+    opacity: 0.8;
+  }
+
+  .cloud-review-text {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.6;
+    margin-bottom: 0.6rem;
+    font-style: italic;
+  }
+
+  .cloud-review-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
     .hero-scroll-cue { right: 1.5rem; }
     .stats-section { grid-template-columns: repeat(2, 1fr); padding: 3rem 1.5rem; gap: 2rem; }
     .stat-block { padding: 0; border-right: none; }
@@ -600,6 +648,7 @@
   <div class="hero-grid"></div>
   <div class="hero-orb hero-orb-1"></div>
   <div class="hero-orb hero-orb-2"></div>
+  <div class="cloud-reviews" id="cloudReviews"></div>
   <img src="FRAG1.png" class="hero-watermark" alt="" aria-hidden="true">
 
   <div class="hero-content">
@@ -821,11 +870,83 @@ function checkAll() {
 window.addEventListener('scroll', checkAll, { passive: true });
 setTimeout(checkAll, 200);
 
-// Make service cards link to services page
-document.querySelectorAll('.svc-card').forEach(card => {
-  card.style.cursor = 'pointer';
-  card.addEventListener('click', () => window.location.href = 'services.html');
-});
+// ── FLOATING CLOUD REVIEWS
+async function loadCloudReviews() {
+  try {
+    const res = await fetch('reviews.json?v=' + Date.now());
+    const reviews = await res.json();
+    if (!reviews.length) return;
+
+    const container = document.getElementById('cloudReviews');
+    const heroEl = document.querySelector('.hero');
+
+    // Positions to float reviews around — avoiding center where text is
+    const positions = [
+      { top: '18%', left: '3%' },
+      { top: '15%', right: '4%' },
+      { top: '55%', left: '2%' },
+      { top: '60%', right: '3%' },
+      { top: '35%', left: '68%' },
+    ];
+
+    let activeCloud = null;
+    let reviewIndex = 0;
+
+    function showNextCloud() {
+      // Hide current
+      if (activeCloud) {
+        activeCloud.classList.remove('visible');
+        setTimeout(() => {
+          if (activeCloud && activeCloud.parentNode) {
+            activeCloud.parentNode.removeChild(activeCloud);
+          }
+        }, 1200);
+      }
+
+      const review = reviews[reviewIndex % reviews.length];
+      const pos = positions[reviewIndex % positions.length];
+      reviewIndex++;
+
+      const cloud = document.createElement('div');
+      cloud.className = 'cloud-review';
+
+      // Apply position
+      Object.keys(pos).forEach(k => cloud.style[k] = pos[k]);
+
+      cloud.innerHTML = `
+        <div class="cloud-review-stars">${'★'.repeat(review.rating)}</div>
+        <div class="cloud-review-text">${review.text.length > 100 ? review.text.substring(0, 100) + '...' : review.text}</div>
+        <div class="cloud-review-name">${review.name} · ${review.service}</div>
+      `;
+
+      container.appendChild(cloud);
+      activeCloud = cloud;
+
+      // Fade in after a tick
+      requestAnimationFrame(() => requestAnimationFrame(() => cloud.classList.add('visible')));
+
+      // Hide after 30 seconds
+      setTimeout(() => {
+        cloud.classList.remove('visible');
+        setTimeout(() => {
+          if (cloud.parentNode) cloud.parentNode.removeChild(cloud);
+          activeCloud = null;
+        }, 1200);
+      }, 30000);
+    }
+
+    // Start after 3 seconds, then cycle every 32 seconds
+    setTimeout(() => {
+      showNextCloud();
+      setInterval(showNextCloud, 32000);
+    }, 3000);
+
+  } catch(e) {
+    // No reviews yet — silently do nothing
+  }
+}
+
+loadCloudReviews();
 </script>
 </body>
 </html>
