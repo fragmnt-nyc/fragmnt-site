@@ -8,114 +8,824 @@
 <link rel="stylesheet" href="shared.css">
 <script src="shared.js"></script>
 <style>
-  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 3rem 4rem;position:relative;overflow:hidden;}
-  .hero-watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:clamp(320px,65vw,750px);opacity:0.04;pointer-events:none;user-select:none;filter:grayscale(1);}
-  .hero-eyebrow{font-family:'Space Mono',monospace;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:#888;margin-bottom:1.5rem;}
-  .hero h1{font-size:clamp(2.8rem,6vw,5.5rem);font-weight:600;line-height:1.05;letter-spacing:-0.03em;color:#fff;max-width:700px;margin-bottom:1.5rem;}
-  .hero h1 em{font-style:normal;color:#888;}
-  .hero-sub{font-size:1.05rem;color:#888;max-width:420px;margin-bottom:2.5rem;line-height:1.7;}
-  .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;}
-  .hero-scroll{position:absolute;bottom:2.5rem;left:3rem;font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:#888;display:flex;align-items:center;gap:0.75rem;}
-  .hero-scroll::before{content:'';display:block;width:40px;height:1px;background:#888;}
+  :root {
+    --mono: 'Space Mono', monospace;
+    --ash: #888;
+    --ash-dim: #555;
+    --line: rgba(255,255,255,0.07);
+  }
 
-  .stats-strip{max-width:1100px;margin:0 auto;padding:4rem 3rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:2rem;border-top:1px solid rgba(255,255,255,0.08);}
-  .stat-item{}
-  .stat-num{font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;color:#fff;margin-bottom:0.3rem;}
-  .stat-label{font-size:0.8rem;color:#888;letter-spacing:0.05em;}
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 3rem 7rem;
+    position: relative;
+    overflow: hidden;
+  }
 
-  .preview-section{max-width:1100px;margin:0 auto;padding:5rem 3rem;}
-  .preview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08);border-radius:8px;overflow:hidden;margin-bottom:2rem;}
-  .preview-card{background:#111;padding:1.75rem;transition:background 0.2s;}
-  .preview-card:hover{background:#181818;}
-  .preview-icon{font-size:1.3rem;margin-bottom:0.75rem;}
-  .preview-name{font-size:1rem;font-weight:600;color:#fff;margin-bottom:0.35rem;}
-  .preview-price{font-family:'Space Mono',monospace;font-size:0.85rem;color:#888;}
-  .preview-cta{text-align:center;}
+  /* Animated grid background */
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+    opacity: 0;
+    animation: gridFadeIn 2s ease 0.3s forwards;
+  }
 
-  @media(max-width:768px){
-    .hero{padding:7rem 1.5rem 4rem;}
-    .hero-scroll{left:1.5rem;}
-    .stats-strip{padding:3rem 1.5rem;}
-    .preview-section{padding:4rem 1.5rem;}
+  @keyframes gridFadeIn { to { opacity: 1; } }
+
+  /* Glowing orbs */
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(100px);
+    opacity: 0;
+  }
+
+  .hero-orb-1 {
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(255,255,255,0.055) 0%, transparent 65%);
+    top: -20%; left: -15%;
+    animation: orbAppear 2s ease 0.5s forwards, orbDrift1 12s ease-in-out infinite 2s;
+  }
+
+  .hero-orb-2 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 65%);
+    bottom: 0%; right: 10%;
+    animation: orbAppear 2s ease 0.8s forwards, orbDrift2 15s ease-in-out infinite 2s;
+  }
+
+  @keyframes orbAppear { to { opacity: 1; } }
+  @keyframes orbDrift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(50px,40px)} }
+  @keyframes orbDrift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-40px,-30px)} }
+
+  /* Watermark logo */
+  .hero-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(300px, 60vw, 700px);
+    opacity: 0;
+    filter: grayscale(1);
+    pointer-events: none;
+    user-select: none;
+    animation: wmFade 2.5s ease 0.4s forwards;
+  }
+
+  @keyframes wmFade { to { opacity: 0.035; } }
+
+  /* Hero content */
+  .hero-content { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; width: 100%; }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    margin-bottom: 2rem;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: riseIn 0.7s cubic-bezier(.2,.7,.3,1) 0.4s forwards;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .hero-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--ash-dim); }
+
+  /* Word-by-word title animation */
+  .hero-h1 {
+    font-size: clamp(3.5rem, 8vw, 8rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.93;
+    color: #fff;
+    margin-bottom: 2.5rem;
+  }
+
+  .word-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+  }
+
+  .word-inner {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(110%);
+    animation: wordSlide 0.85s cubic-bezier(.16,1,.3,1) forwards;
+  }
+
+  .w1 .word-inner { animation-delay: 0.3s; }
+  .w2 .word-inner { animation-delay: 0.45s; }
+  .w3 .word-inner { animation-delay: 0.6s; }
+  .w4 .word-inner { animation-delay: 0.75s; color: rgba(255,255,255,0.25); }
+  .w5 .word-inner { animation-delay: 0.9s; }
+  .w6 .word-inner { animation-delay: 1.05s; color: rgba(255,255,255,0.25); }
+
+  @keyframes wordSlide { to { opacity: 1; transform: translateY(0); } }
+  @keyframes riseIn { to { opacity: 1; transform: translateY(0); } }
+
+  .hero-bottom {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: riseIn 0.8s cubic-bezier(.2,.7,.3,1) 1.2s forwards;
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--ash);
+    max-width: 400px;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  /* Live indicator */
+  .hero-live {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    flex-shrink: 0;
+    align-self: flex-end;
+    padding-bottom: 0.1rem;
+  }
+
+  .live-dot {
+    width: 6px; height: 6px;
+    background: #4ade80;
+    border-radius: 50%;
+    animation: livePulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes livePulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.4); }
+    50% { box-shadow: 0 0 0 5px rgba(74,222,128,0); }
+  }
+
+  /* Scroll cue */
+  .hero-scroll-cue {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 0;
+    animation: riseIn 0.6s ease 1.6s forwards;
+    z-index: 2;
+  }
+
+  .scroll-track {
+    width: 1px;
+    height: 48px;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-track::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.5), transparent);
+    animation: trackScroll 2s ease-in-out infinite 1.8s;
+  }
+
+  @keyframes trackScroll { 0%{top:-100%} 100%{top:100%} }
+
+  .scroll-cue-label {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    writing-mode: vertical-rl;
+  }
+
+  /* ── MARQUEE / TICKER ── */
+  .ticker-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 0.85rem 0;
+    background: rgba(255,255,255,0.012);
+  }
+
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    gap: 3rem;
+    animation: ticker 20s linear infinite;
+  }
+
+  .ticker-item {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .ticker-item::after { content: '·'; color: rgba(255,255,255,0.15); }
+
+  @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* ── STATS ── */
+  .stats-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 3rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .stat-block {
+    padding: 0 2.5rem;
+    border-right: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s cubic-bezier(.2,.7,.3,1), transform 0.7s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .stat-block:first-child { padding-left: 0; }
+  .stat-block:last-child { border-right: none; }
+  .stat-block.in-view { opacity: 1; transform: translateY(0); }
+  .stat-block:nth-child(2) { transition-delay: 0.1s; }
+  .stat-block:nth-child(3) { transition-delay: 0.2s; }
+  .stat-block:nth-child(4) { transition-delay: 0.3s; }
+
+  .stat-num {
+    font-family: var(--mono);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-label { font-size: 0.78rem; color: var(--ash); line-height: 1.6; }
+
+  /* ── SERVICES PREVIEW ── */
+  .preview-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 3rem 6rem;
+  }
+
+  .preview-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    gap: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s cubic-bezier(.2,.7,.3,1), transform 0.7s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .preview-header.in-view { opacity: 1; transform: translateY(0); }
+
+  .preview-header h2 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: #fff;
+    line-height: 1.05;
+  }
+
+  .preview-header a {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: color 0.2s;
+    padding-bottom: 0.3rem;
+  }
+
+  .preview-header a:hover { color: #fff; }
+
+  /* Service cards */
+  .svc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 0;
+  }
+
+  .svc-card {
+    background: #0d0d0d;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+    transition:
+      opacity 0.7s cubic-bezier(.2,.7,.3,1),
+      transform 0.7s cubic-bezier(.2,.7,.3,1),
+      background 0.3s;
+  }
+
+  .svc-card.in-view { opacity: 1; transform: translateY(0) scale(1); }
+  .svc-card:nth-child(2) { transition-delay: 0.07s; }
+  .svc-card:nth-child(3) { transition-delay: 0.14s; }
+  .svc-card:nth-child(4) { transition-delay: 0.21s; }
+  .svc-card:nth-child(5) { transition-delay: 0.28s; }
+  .svc-card:nth-child(6) { transition-delay: 0.35s; }
+
+  /* Shimmer on hover */
+  .svc-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0) 100%);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+
+  .svc-card:hover { background: #131313; }
+  .svc-card:hover::before { opacity: 1; }
+
+  .svc-card-num {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--ash-dim);
+    margin-bottom: 1.25rem;
+    transition: color 0.3s;
+  }
+
+  .svc-card:hover .svc-card-num { color: var(--ash); }
+
+  .svc-card-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.01em;
+  }
+
+  .svc-card-price {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--ash);
+    transition: color 0.3s;
+  }
+
+  .svc-card:hover .svc-card-price { color: rgba(255,255,255,0.6); }
+
+  /* Arrow that appears on hover */
+  .svc-card-arrow {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.15);
+    transform: translate(4px, 4px);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s, color 0.3s;
+  }
+
+  .svc-card:hover .svc-card-arrow {
+    opacity: 1;
+    transform: translate(0, 0);
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* ── FULL WIDTH STATEMENT ── */
+  .statement {
+    padding: 8rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .statement-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    filter: blur(40px);
+  }
+
+  .statement-line {
+    display: block;
+    overflow: hidden;
+  }
+
+  .statement-line span {
+    display: block;
+    font-size: clamp(2.5rem, 6vw, 6.5rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(70px);
+    transition: opacity 0.9s cubic-bezier(.16,1,.3,1), transform 0.9s cubic-bezier(.16,1,.3,1);
+  }
+
+  .statement-line:nth-child(2) span { transition-delay: 0.12s; color: rgba(255,255,255,0.3); }
+  .statement-line:nth-child(3) span { transition-delay: 0.24s; }
+
+  .statement.in-view .statement-line span { opacity: 1; transform: translateY(0); }
+
+  /* ── WHY US ── */
+  .why-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 4rem 3rem 6rem;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .why-item {
+    background: #0d0d0d;
+    padding: 2.5rem;
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.7s cubic-bezier(.2,.7,.3,1), transform 0.7s cubic-bezier(.2,.7,.3,1), background 0.3s;
+  }
+
+  .why-item:nth-child(even) { transform: translateX(30px); }
+  .why-item.in-view { opacity: 1; transform: translateX(0); }
+  .why-item:nth-child(2) { transition-delay: 0.1s; }
+  .why-item:nth-child(3) { transition-delay: 0.15s; }
+  .why-item:nth-child(4) { transition-delay: 0.25s; }
+  .why-item:hover { background: #131313; }
+
+  .why-num {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--ash-dim);
+    margin-bottom: 1rem;
+  }
+
+  .why-heading { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+  .why-body { font-size: 0.85rem; color: var(--ash); line-height: 1.75; }
+
+  /* ── CTA BAND ── */
+  .cta-band {
+    background: #fff;
+    padding: 5rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    overflow: hidden;
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.9s cubic-bezier(.2,.7,.3,1), transform 0.9s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .cta-band.in-view { opacity: 1; transform: translateY(0); }
+
+  /* Animated noise texture */
+  .cta-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .cta-band-left { position: relative; z-index: 1; }
+
+  .cta-band h2 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    color: #000;
+    line-height: 1.05;
+    margin-bottom: 0.75rem;
+  }
+
+  .cta-band p { font-size: 0.9rem; color: rgba(0,0,0,0.5); }
+
+  .cta-band-btn {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: opacity 0.2s, transform 0.2s;
+    position: relative;
+    z-index: 1;
+    flex-shrink: 0;
+  }
+
+  .cta-band-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width: 768px) {
+    .hero { padding: 0 1.5rem 5rem; }
+    .hero-scroll-cue { right: 1.5rem; }
+    .stats-section { grid-template-columns: repeat(2, 1fr); padding: 3rem 1.5rem; gap: 2rem; }
+    .stat-block { padding: 0; border-right: none; }
+    .svc-grid { grid-template-columns: 1fr 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .preview-section, .why-section { padding: 4rem 1.5rem; }
+    .statement { padding: 5rem 1.5rem; }
+    .cta-band { padding: 3.5rem 1.5rem; }
+    .preview-header { flex-direction: column; align-items: flex-start; }
   }
 </style>
 </head>
 <body>
+
+<!-- ── HERO ── -->
 <div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
   <img src="FRAG1.png" class="hero-watermark" alt="" aria-hidden="true">
-  <p class="hero-eyebrow">New York City · PC Services</p>
-  <h1>Built different.<br><em>Repaired right.</em></h1>
-  <p class="hero-sub">Custom builds, diagnostics, repairs, and cleaning — done by someone who actually knows what they're doing.</p>
-  <div class="hero-actions">
-    <a href="services.html" class="btn-primary">View Services</a>
-    <a href="contact.html" class="btn-ghost">Get in Touch</a>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">New York City · PC Services</p>
+
+    <h1 class="hero-h1">
+      <span class="word-mask w1"><span class="word-inner">Built</span></span>&nbsp;
+      <span class="word-mask w2"><span class="word-inner">different.</span></span><br>
+      <span class="word-mask w3"><span class="word-inner">Repaired</span></span>&nbsp;
+      <span class="word-mask w4"><span class="word-inner">right.</span></span>
+    </h1>
+
+    <div class="hero-bottom">
+      <div>
+        <p class="hero-sub">Custom builds, diagnostics, repairs, and cleaning — done by someone who actually knows what they're doing.</p>
+        <div class="hero-actions">
+          <a href="services.html" class="btn-primary">View Services & Pricing</a>
+          <a href="book.html" class="btn-ghost">Book Now</a>
+        </div>
+      </div>
+      <div class="hero-live">
+        <div class="live-dot"></div>
+        Taking bookings · NYC
+      </div>
+    </div>
   </div>
-  <span class="hero-scroll">Scroll to explore</span>
+
+  <div class="hero-scroll-cue">
+    <div class="scroll-track"></div>
+    <span class="scroll-cue-label">Scroll</span>
+  </div>
+</div>
+
+<!-- ── TICKER ── -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item">Custom PC Build</span>
+    <span class="ticker-item">Repairs & Rebuild</span>
+    <span class="ticker-item">Diagnostics</span>
+    <span class="ticker-item">PC Cleaning</span>
+    <span class="ticker-item">Consultation</span>
+    <span class="ticker-item">Tune-Up Bundle</span>
+    <span class="ticker-item">Based in NYC</span>
+    <span class="ticker-item">No Hidden Fees</span>
+    <span class="ticker-item">Custom PC Build</span>
+    <span class="ticker-item">Repairs & Rebuild</span>
+    <span class="ticker-item">Diagnostics</span>
+    <span class="ticker-item">PC Cleaning</span>
+    <span class="ticker-item">Consultation</span>
+    <span class="ticker-item">Tune-Up Bundle</span>
+    <span class="ticker-item">Based in NYC</span>
+    <span class="ticker-item">No Hidden Fees</span>
+  </div>
+</div>
+
+<!-- ── STATS ── -->
+<div class="stats-section">
+  <div class="stat-block">
+    <div class="stat-num">6</div>
+    <div class="stat-label">Services offered</div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-num">NYC</div>
+    <div class="stat-label">Based & operating locally</div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-num">24hr</div>
+    <div class="stat-label">Response time</div>
+  </div>
+  <div class="stat-block">
+    <div class="stat-num">$0</div>
+    <div class="stat-label">First 15 min consultation</div>
+  </div>
 </div>
 
 <div class="divider"></div>
 
-<div class="stats-strip">
-  <div class="stat-item fade-up">
-    <p class="stat-num">6</p>
-    <p class="stat-label">Services offered</p>
-  </div>
-  <div class="stat-item fade-up">
-    <p class="stat-num">NYC</p>
-    <p class="stat-label">Based & operating locally</p>
-  </div>
-  <div class="stat-item fade-up">
-    <p class="stat-num">24hr</p>
-    <p class="stat-label">Response time</p>
-  </div>
-  <div class="stat-item fade-up">
-    <p class="stat-num">$0</p>
-    <p class="stat-label">First 15 min consultation</p>
-  </div>
-</div>
-
-<div class="divider"></div>
-
+<!-- ── SERVICES PREVIEW ── -->
 <div class="preview-section">
-  <p class="section-label">What we do</p>
-  <h2 class="section-title">Services at a glance</h2>
-  <div class="preview-grid">
-    <div class="preview-card scale-in">
-      <div class="preview-icon">🖥️</div>
-      <p class="preview-name">Custom PC Build</p>
-      <p class="preview-price">$80 – $200</p>
+  <div class="preview-header">
+    <div>
+      <p class="section-label">What we do</p>
+      <h2>Services<br>at a glance</h2>
     </div>
-    <div class="preview-card scale-in">
-      <div class="preview-icon">🔧</div>
-      <p class="preview-name">Repairs & Rebuild</p>
-      <p class="preview-price">$55 – $75 / hr</p>
-    </div>
-    <div class="preview-card scale-in">
-      <div class="preview-icon">🔍</div>
-      <p class="preview-name">Diagnostics</p>
-      <p class="preview-price">$30 – $75</p>
-    </div>
-    <div class="preview-card scale-in">
-      <div class="preview-icon">🧹</div>
-      <p class="preview-name">PC Cleaning</p>
-      <p class="preview-price">$40 – $100</p>
-    </div>
-    <div class="preview-card scale-in">
-      <div class="preview-icon">💬</div>
-      <p class="preview-name">Consultation</p>
-      <p class="preview-price">$25 – $50 / hr</p>
-    </div>
-    <div class="preview-card scale-in">
-      <div class="preview-icon">📦</div>
-      <p class="preview-name">Tune-Up Bundle</p>
-      <p class="preview-price">$80 flat</p>
-    </div>
+    <a href="services.html">Full details & pricing →</a>
   </div>
-  <div class="preview-cta fade-up">
-    <a href="services.html" class="btn-primary">See full details →</a>
+
+  <div class="svc-grid">
+    <div class="svc-card">
+      <div class="svc-card-num">01</div>
+      <div class="svc-card-name">Custom PC Build</div>
+      <div class="svc-card-price">$80 – $200</div>
+      <div class="svc-card-arrow">→</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-card-num">02</div>
+      <div class="svc-card-name">Repairs & Rebuild</div>
+      <div class="svc-card-price">$55 – $75 / hr</div>
+      <div class="svc-card-arrow">→</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-card-num">03</div>
+      <div class="svc-card-name">Diagnostics</div>
+      <div class="svc-card-price">$30 – $75</div>
+      <div class="svc-card-arrow">→</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-card-num">04</div>
+      <div class="svc-card-name">PC Cleaning</div>
+      <div class="svc-card-price">$40 – $100</div>
+      <div class="svc-card-arrow">→</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-card-num">05</div>
+      <div class="svc-card-name">Consultation</div>
+      <div class="svc-card-price">$25 – $50 / hr</div>
+      <div class="svc-card-arrow">→</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-card-num">06</div>
+      <div class="svc-card-name">Tune-Up Bundle</div>
+      <div class="svc-card-price">$80 flat</div>
+      <div class="svc-card-arrow">→</div>
+    </div>
   </div>
 </div>
 
-<script>// nav auto-injected by shared.js</script>
+<!-- ── STATEMENT ── -->
+<div class="divider"></div>
+<div class="statement">
+  <div class="statement-glow"></div>
+  <span class="statement-line"><span>No big box stores.</span></span>
+  <span class="statement-line"><span>No guesswork.</span></span>
+  <span class="statement-line"><span>Just the work.</span></span>
+</div>
+<div class="divider"></div>
+
+<!-- ── WHY US ── -->
+<div class="why-section">
+  <div style="margin-bottom:3rem;opacity:0;transform:translateY(20px);transition:all 0.7s cubic-bezier(.2,.7,.3,1);" class="why-header">
+    <p class="section-label">Why Fragmnt</p>
+    <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:600;letter-spacing:-0.03em;color:#fff;line-height:1.05;">What sets us apart.</h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-item">
+      <div class="why-num">01</div>
+      <div class="why-heading">Real hands-on experience</div>
+      <div class="why-body">Diagnosed and repaired real client machines — PSU failures, GPU crashes, BSODs, full rebuilds. Not book knowledge.</div>
+    </div>
+    <div class="why-item">
+      <div class="why-num">02</div>
+      <div class="why-heading">Transparent pricing</div>
+      <div class="why-body">You know exactly what you're paying before we touch anything. No hidden fees, no surprise charges at the end.</div>
+    </div>
+    <div class="why-item">
+      <div class="why-num">03</div>
+      <div class="why-heading">Based in NYC</div>
+      <div class="why-body">Local service, real availability. No shipping your rig across the country and hoping for the best.</div>
+    </div>
+    <div class="why-item">
+      <div class="why-num">04</div>
+      <div class="why-heading">We source the parts</div>
+      <div class="why-body">For builds, we source the components and handle everything — assembly, setup, and full stress testing before handoff.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA BAND ── -->
+<div class="cta-band">
+  <div class="cta-band-left">
+    <h2>Ready to build<br>or get fixed?</h2>
+    <p>New York City · In-person only · 24hr response</p>
+  </div>
+  <a href="book.html" class="cta-band-btn">Book a service →</a>
+</div>
+
+<script>
+function checkAll() {
+  const vh = window.innerHeight;
+
+  // Stat blocks
+  document.querySelectorAll('.stat-block').forEach((el, i) => {
+    const r = el.getBoundingClientRect();
+    if (r.top < vh * 0.9 && r.bottom > 0) setTimeout(() => el.classList.add('in-view'), i * 100);
+  });
+
+  // Preview header
+  const ph = document.querySelector('.preview-header');
+  if (ph) { const r = ph.getBoundingClientRect(); if (r.top < vh * 0.88) ph.classList.add('in-view'); }
+
+  // Service cards
+  document.querySelectorAll('.svc-card').forEach((el, i) => {
+    const r = el.getBoundingClientRect();
+    if (r.top < vh * 0.9 && r.bottom > 0) setTimeout(() => el.classList.add('in-view'), i * 70);
+  });
+
+  // Statement
+  const stmt = document.querySelector('.statement');
+  if (stmt) { const r = stmt.getBoundingClientRect(); if (r.top < vh * 0.85) stmt.classList.add('in-view'); }
+
+  // Why header
+  const wh = document.querySelector('.why-header');
+  if (wh) {
+    const r = wh.getBoundingClientRect();
+    if (r.top < vh * 0.88) { wh.style.opacity='1'; wh.style.transform='translateY(0)'; }
+  }
+
+  // Why items
+  document.querySelectorAll('.why-item').forEach((el, i) => {
+    const r = el.getBoundingClientRect();
+    if (r.top < vh * 0.9 && r.bottom > 0) setTimeout(() => el.classList.add('in-view'), i * 100);
+  });
+
+  // CTA band
+  const cta = document.querySelector('.cta-band');
+  if (cta) { const r = cta.getBoundingClientRect(); if (r.top < vh * 0.9) cta.classList.add('in-view'); }
+}
+
+window.addEventListener('scroll', checkAll, { passive: true });
+setTimeout(checkAll, 200);
+
+// Make service cards link to services page
+document.querySelectorAll('.svc-card').forEach(card => {
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', () => window.location.href = 'services.html');
+});
+</script>
 </body>
 </html>
