@@ -363,96 +363,42 @@
 </div>
 
 <script>
-// ── LOAD REVIEWS FROM JSON
-async function loadReviews() {
-  try {
-    const res = await fetch('reviews.json?v=' + Date.now());
-    const reviews = await res.json();
-    const grid = document.getElementById('reviewsGrid');
+// REVIEWS DATA - add approved reviews here
+const REVIEWS = [
+  {
+    name: "Jordi",
+    location: "Queens, NY",
+    service: "Repairs & Rebuild",
+    rating: 5,
+    text: "Amazing service!! Great deals and made my PC run again perfectly without any crashes and amazing gaming quality."
+  }
+];
 
-    if (!reviews.length) {
-      document.getElementById('noReviews').style.display = 'block';
-      return;
-    }
-
-    reviews.forEach((rv, i) => {
-      const card = document.createElement('div');
-      card.className = 'review-card';
-      card.style.transitionDelay = (i * 0.1) + 's';
-      card.innerHTML = `
-        <div class="review-stars">${'<div class="star"></div>'.repeat(rv.rating)}</div>
-        <div class="review-text">${rv.text}</div>
-        <div class="review-meta">
-          <div>
-            <div class="review-name">${rv.name}</div>
-            <div class="review-location">${rv.location}</div>
-          </div>
-          <div class="review-service-tag">${rv.service}</div>
-        </div>
-      `;
-      grid.appendChild(card);
-    });
-
-    // Observe cards
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.review-card').forEach(el => obs.observe(el));
-
-  } catch(e) {
+function loadReviews() {
+  const grid = document.getElementById('reviewsGrid');
+  if (!REVIEWS.length) {
     document.getElementById('noReviews').style.display = 'block';
+    return;
   }
-}
-
-// ── STAR RATING
-let rating = 0;
-function setRating(val) {
-  rating = val;
-  document.getElementById('ratingInput').value = val;
-  document.querySelectorAll('.star-btn').forEach(btn => {
-    btn.classList.toggle('active', parseInt(btn.dataset.val) <= val);
+  REVIEWS.forEach((rv, i) => {
+    const card = document.createElement('div');
+    card.className = 'review-card';
+    card.style.transitionDelay = (i * 0.1) + 's';
+    card.innerHTML =
+      '<div class="review-stars">' + '<div class="star"></div>'.repeat(rv.rating) + '</div>' +
+      '<div class="review-text">' + rv.text + '</div>' +
+      '<div class="review-meta"><div>' +
+      '<div class="review-name">' + rv.name + '</div>' +
+      '<div class="review-location">' + rv.location + '</div>' +
+      '</div><div class="review-service-tag">' + rv.service + '</div></div>';
+    grid.appendChild(card);
   });
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.review-card').forEach(el => obs.observe(el));
 }
 
-// ── SUBMIT
-async function submitReview(e) {
-  e.preventDefault();
-  if (!rating) { alert('Please select a star rating.'); return; }
-  const form = document.getElementById('reviewForm');
-  const btn = document.getElementById('submitBtn');
-  btn.textContent = 'Sending...';
-  btn.disabled = true;
-
-  try {
-    const res = await fetch('https://formspree.io/f/mojzgdbn', {
-      method: 'POST',
-      body: new FormData(form),
-      headers: { 'Accept': 'application/json' }
-    });
-
-    if (res.ok) {
-      form.style.display = 'none';
-      document.getElementById('formSuccess').style.display = 'block';
-    } else {
-      btn.textContent = 'Something went wrong — try again';
-      btn.disabled = false;
-    }
-  } catch(err) {
-    btn.textContent = 'Network error — try again';
-    btn.disabled = false;
-  }
-}
-
-// ── SCROLL ANIMATIONS
-function checkAll() {
-  const vh = window.innerHeight;
-  ['.submit-header', '.review-form'].forEach(sel => {
-    const el = document.querySelector(sel);
-    if (el) { const r = el.getBoundingClientRect(); if (r.top < vh * 0.88) el.classList.add('in-view'); }
-  });
-}
-
-window.addEventListener('scroll', checkAll, { passive: true });
 loadReviews();
 setTimeout(checkAll, 200);
 </script>
