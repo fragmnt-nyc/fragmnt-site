@@ -871,10 +871,17 @@ window.addEventListener('scroll', checkAll, { passive: true });
 setTimeout(checkAll, 200);
 
 // ── FLOATING CLOUD REVIEWS
-async function loadCloudReviews() {
+function loadCloudReviews() {
   try {
-    const res = await fetch('reviews.json?v=' + Date.now());
-    const reviews = await res.json();
+    const reviews = [
+      {
+        name: "Jordi",
+        location: "Queens, NY",
+        service: "Repairs & Rebuild",
+        rating: 5,
+        text: "Amazing service!! Great deals and made my PC run again perfectly without any crashes and amazing gaming quality."
+      }
+    ];
     if (!reviews.length) return;
 
     const container = document.getElementById('cloudReviews');
@@ -941,9 +948,7 @@ async function loadCloudReviews() {
       setInterval(showNextCloud, 32000);
     }, 3000);
 
-  } catch(e) {
-    // No reviews yet — silently do nothing
-  }
+  } catch(e) {}
 }
 
 loadCloudReviews();
