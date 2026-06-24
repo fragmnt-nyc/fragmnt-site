@@ -13,64 +13,270 @@
     --ash: #888;
     --ash-dim: #555;
     --line: rgba(255,255,255,0.07);
-  }
-
-  /* ── HERO ── */
-  .rv-hero {
-    padding: 10rem 3rem 4rem;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .rv-hero h1 {
-    font-size: clamp(3rem, 6vw, 6rem);
-    font-weight: 600;
-    letter-spacing: -0.04em;
-    line-height: 0.95;
-    color: #fff;
-    margin-bottom: 1rem;
-    opacity: 0;
-    transform: translateY(30px);
-    animation: riseIn 0.9s cubic-bezier(.2,.7,.3,1) 0.2s forwards;
-  }
-
-  .rv-hero p {
-    font-size: 1rem;
-    color: var(--ash);
-    max-width: 400px;
-    line-height: 1.8;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: riseIn 0.7s cubic-bezier(.2,.7,.3,1) 0.4s forwards;
+    --line-strong: rgba(255,255,255,0.14);
   }
 
   @keyframes riseIn { to { opacity: 1; transform: translateY(0); } }
+  @keyframes wordSlide { to { opacity: 1; transform: translateY(0); } }
 
-  /* ── REVIEWS GRID ── */
+  /* ── HERO ── */
+  .rv-hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 3rem 5rem;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    align-items: center;
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(100px);
+    opacity: 0;
+    animation: orbAppear 2s ease forwards;
+  }
+  @keyframes orbAppear { to { opacity: 1; } }
+
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%);
+    top: -20%; left: -15%;
+    animation: orbAppear 2s ease 0.3s forwards;
+  }
+
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 65%);
+    bottom: 5%; right: 5%;
+    animation: orbAppear 2s ease 0.6s forwards;
+  }
+
+  .rv-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: riseIn 0.7s cubic-bezier(.2,.7,.3,1) 0.2s forwards;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .rv-eyebrow::before,
+  .rv-eyebrow::after { content: ''; display: block; width: 30px; height: 1px; background: var(--ash-dim); }
+
+  .rv-title {
+    font-size: clamp(3.5rem, 8vw, 8rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 0.93;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .word-mask { display: inline-block; overflow: hidden; vertical-align: bottom; }
+  .word-inner {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(110%);
+    animation: wordSlide 0.85s cubic-bezier(.16,1,.3,1) forwards;
+    color: #fff;
+  }
+  .word-inner.dim { color: rgba(255,255,255,0.25); }
+  .w1 .word-inner { animation-delay: 0.3s; }
+  .w2 .word-inner { animation-delay: 0.45s; }
+  .w3 .word-inner { animation-delay: 0.6s; }
+
+  .rv-sub {
+    font-size: 1rem;
+    color: var(--ash);
+    max-width: 380px;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: riseIn 0.7s cubic-bezier(.2,.7,.3,1) 0.8s forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  .rv-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 0.9rem 2rem;
+    border-radius: 4px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    opacity: 0;
+    animation: riseIn 0.7s cubic-bezier(.2,.7,.3,1) 1s forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  .rv-cta-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: riseIn 0.6s ease 1.4s forwards;
+    z-index: 2;
+  }
+
+  .scroll-mouse {
+    width: 20px; height: 32px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    padding-top: 6px;
+  }
+
+  .scroll-wheel {
+    width: 3px; height: 6px;
+    background: #fff;
+    border-radius: 2px;
+    animation: scrollWheel 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollWheel {
+    0% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(10px); }
+  }
+
+  .scroll-indicator span {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+  }
+
+  /* ── TICKER ── */
+  .ticker-wrap {
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 0.85rem 0;
+    background: rgba(255,255,255,0.012);
+  }
+
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    gap: 3rem;
+    animation: ticker 20s linear infinite;
+  }
+
+  .ticker-item {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .ticker-item::after { content: '★'; color: rgba(255,255,255,0.15); font-size: 0.5rem; }
+  @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* ── REVIEWS SECTION ── */
   .reviews-section {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 3rem 3rem 5rem;
+    padding: 5rem 3rem 6rem;
   }
 
+  .reviews-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    gap: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s cubic-bezier(.2,.7,.3,1), transform 0.7s cubic-bezier(.2,.7,.3,1);
+  }
+
+  .reviews-header.in-view { opacity: 1; transform: translateY(0); }
+
+  .reviews-header h2 {
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: #fff;
+    line-height: 1.05;
+  }
+
+  .review-count {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ash-dim);
+    padding-bottom: 0.3rem;
+    flex-shrink: 0;
+  }
+
+  /* Masonry-style grid */
   .reviews-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 4rem;
+    columns: 3;
+    column-gap: 1.5rem;
   }
 
   .review-card {
+    break-inside: avoid;
     background: #0d0d0d;
     border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 1.75rem;
+    margin-bottom: 1.5rem;
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.7s cubic-bezier(.2,.7,.3,1), transform 0.7s cubic-bezier(.2,.7,.3,1), border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .review-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.025) 50%, rgba(255,255,255,0) 100%);
+    opacity: 0;
+    transition: opacity 0.4s;
   }
 
   .review-card:hover { border-color: rgba(255,255,255,0.15); }
+  .review-card:hover::before { opacity: 1; }
   .review-card.in-view { opacity: 1; transform: translateY(0); }
 
   .review-stars {
@@ -80,22 +286,34 @@
   }
 
   .star {
-    width: 12px;
-    height: 12px;
+    width: 11px; height: 11px;
     background: #fff;
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    opacity: 0.9;
+  }
+
+  /* Review photo */
+  .review-photo {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    object-fit: cover;
+    max-height: 200px;
+    display: block;
+    border: 1px solid rgba(255,255,255,0.06);
   }
 
   .review-text {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: #ccc;
     line-height: 1.8;
     margin-bottom: 1.5rem;
     font-style: italic;
+    position: relative;
+    z-index: 1;
   }
 
-  .review-text::before { content: '"'; }
-  .review-text::after { content: '"'; }
+  .review-text::before { content: '\201C'; font-size: 1.5rem; color: rgba(255,255,255,0.15); line-height: 0; vertical-align: -0.4em; margin-right: 2px; }
 
   .review-meta {
     border-top: 1px solid rgba(255,255,255,0.06);
@@ -104,14 +322,16 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    position: relative;
+    z-index: 1;
   }
 
   .review-name { font-size: 0.85rem; font-weight: 600; color: #fff; }
-  .review-location { font-size: 0.75rem; color: var(--ash-dim); margin-top: 2px; }
+  .review-location { font-size: 0.72rem; color: var(--ash-dim); margin-top: 2px; }
 
   .review-service-tag {
     font-family: var(--mono);
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--ash-dim);
@@ -123,54 +343,58 @@
     flex-shrink: 0;
   }
 
-  /* Empty state */
   .no-reviews {
     text-align: center;
-    padding: 4rem 2rem;
+    padding: 5rem 2rem;
     color: var(--ash-dim);
     font-size: 0.9rem;
     display: none;
+    grid-column: 1/-1;
   }
 
-  /* ── SUBMIT FORM ── */
-  .submit-section {
-    max-width: 700px;
+  /* ── LEAVE REVIEW FORM ── */
+  .form-section {
+    max-width: 1100px;
     margin: 0 auto;
     padding: 4rem 3rem 8rem;
+    border-top: 1px solid var(--line);
   }
 
-  .submit-header {
-    margin-bottom: 2.5rem;
+  .form-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+    margin-bottom: 3.5rem;
     opacity: 0;
     transform: translateY(20px);
-    transition: all 0.7s cubic-bezier(.2,.7,.3,1);
+    transition: opacity 0.7s cubic-bezier(.2,.7,.3,1), transform 0.7s cubic-bezier(.2,.7,.3,1);
   }
 
-  .submit-header.in-view { opacity: 1; transform: translateY(0); }
+  .form-header.in-view { opacity: 1; transform: translateY(0); }
 
-  .submit-header h2 {
-    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  .form-header h2 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
     font-weight: 600;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
     color: #fff;
-    line-height: 1.05;
-    margin-bottom: 0.75rem;
+    line-height: 1.0;
   }
 
-  .submit-header p { font-size: 0.9rem; color: var(--ash); line-height: 1.7; }
+  .form-header p { font-size: 0.88rem; color: var(--ash); line-height: 1.8; }
 
   .review-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.1rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
     opacity: 0;
     transform: translateY(20px);
-    transition: all 0.7s cubic-bezier(.2,.7,.3,1) 0.1s;
+    transition: opacity 0.7s cubic-bezier(.2,.7,.3,1) 0.1s, transform 0.7s cubic-bezier(.2,.7,.3,1) 0.1s;
   }
 
   .review-form.in-view { opacity: 1; transform: translateY(0); }
 
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .col-full { grid-column: 1 / -1; }
 
   .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
 
@@ -186,7 +410,7 @@
   .form-group select {
     background: #0d0d0d;
     border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 4px;
+    border-radius: 6px;
     color: #fff;
     padding: 0.75rem 1rem;
     font-family: 'Space Grotesk', sans-serif;
@@ -203,13 +427,13 @@
   .form-group textarea:focus,
   .form-group select:focus { border-color: rgba(255,255,255,0.3); }
 
-  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-group textarea { resize: vertical; min-height: 130px; }
   .form-group select option { background: #0d0d0d; }
 
-  /* Star rating picker */
+  /* Star rating */
   .star-picker {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.4rem;
     padding-top: 0.2rem;
   }
 
@@ -217,39 +441,88 @@
     background: none;
     border: none;
     cursor: pointer;
-    font-size: 1.3rem;
-    color: rgba(255,255,255,0.15);
-    transition: color 0.15s, transform 0.15s;
+    font-size: 1.6rem;
+    color: rgba(255,255,255,0.12);
+    transition: color 0.15s, transform 0.2s cubic-bezier(.2,.7,.3,1);
     padding: 0;
     line-height: 1;
   }
 
-  .star-btn:hover,
-  .star-btn.active { color: #fff; transform: scale(1.2); }
+  .star-btn:hover { color: rgba(255,255,255,0.5); transform: scale(1.3); }
+  .star-btn.active { color: #fff; transform: scale(1.15); }
 
+  /* Photo upload */
+  .upload-zone {
+    border: 1px dashed rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+
+  .upload-zone:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.02); }
+  .upload-zone.has-file { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.03); }
+
+  .upload-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: none;
+    padding: 0;
+  }
+
+  .upload-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    opacity: 0.4;
+  }
+
+  .upload-text {
+    font-size: 0.82rem;
+    color: var(--ash-dim);
+    line-height: 1.6;
+  }
+
+  .upload-text strong { color: var(--ash); }
+
+  .upload-preview {
+    display: none;
+    width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-top: 0.75rem;
+  }
+
+  /* Submit button */
   .submit-btn {
     background: #fff;
     color: #000;
     border: none;
-    padding: 0.9rem;
-    border-radius: 4px;
+    padding: 0.95rem;
+    border-radius: 6px;
     font-family: 'Space Grotesk', sans-serif;
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s;
-    margin-top: 0.5rem;
+    transition: opacity 0.2s, transform 0.2s;
+    width: 100%;
   }
 
-  .submit-btn:hover { opacity: 0.85; }
-  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .submit-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
   .form-note {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--ash-dim);
     line-height: 1.6;
     display: flex;
-    align-items: flex-start;
     gap: 0.5rem;
   }
 
@@ -257,68 +530,106 @@
 
   .form-success {
     display: none;
-    background: #0d0d0d;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px;
-    padding: 2rem;
     text-align: center;
-    color: var(--ash);
-    font-size: 0.9rem;
-    line-height: 1.7;
+    padding: 3rem 2rem;
+    background: #0d0d0d;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    grid-column: 1/-1;
   }
 
-  .form-success strong { color: #fff; display: block; font-size: 1.05rem; margin-bottom: 0.4rem; }
+  .form-success strong { color: #fff; display: block; font-size: 1.1rem; margin-bottom: 0.5rem; }
+  .form-success p { color: var(--ash); font-size: 0.875rem; line-height: 1.7; }
 
   @media(max-width: 768px) {
-    .rv-hero { padding: 8rem 1.5rem 3rem; }
-    .reviews-section { padding: 2rem 1.5rem 4rem; }
-    .reviews-grid { grid-template-columns: 1fr; }
-    .submit-section { padding: 3rem 1.5rem 6rem; }
-    .form-row { grid-template-columns: 1fr; }
+    .rv-hero { padding: 7rem 1.5rem 5rem; }
+    .reviews-section, .form-section { padding: 4rem 1.5rem; }
+    .reviews-grid { columns: 1; }
+    .form-header { grid-template-columns: 1fr; gap: 1.5rem; }
+    .review-form { grid-template-columns: 1fr; }
+    .col-full { grid-column: 1; }
   }
 </style>
 </head>
 <body>
 
-<!-- HERO -->
+<!-- ── HERO ── -->
 <div class="rv-hero">
-  <p class="section-label" style="opacity:0;animation:riseIn 0.6s cubic-bezier(.2,.7,.3,1) 0.1s forwards;">What clients say</p>
-  <h1>Real results.<br>Real reviews.</h1>
-  <p>Every review below is from a real Fragmnt client. Reviews are verified before being published.</p>
-</div>
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
 
-<div class="divider"></div>
+  <p class="rv-eyebrow">Client experiences</p>
 
-<!-- REVIEWS DISPLAY -->
-<div class="reviews-section">
-  <div class="reviews-grid" id="reviewsGrid">
-    <!-- Injected from reviews.json -->
+  <h1 class="rv-title">
+    <span class="word-mask w1"><span class="word-inner">Real</span></span>&nbsp;
+    <span class="word-mask w2"><span class="word-inner dim">results.</span></span><br>
+    <span class="word-mask w3"><span class="word-inner">Real reviews.</span></span>
+  </h1>
+
+  <p class="rv-sub">Every review is verified before it's published. No filters — just honest client experiences.</p>
+
+  <a href="#leave-review" class="rv-cta-btn">
+    <span>★</span> Leave a review
+  </a>
+
+  <div class="scroll-indicator">
+    <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+    <span>Scroll</span>
   </div>
-  <div class="no-reviews" id="noReviews">No reviews yet — be the first!</div>
+</div>
+
+<!-- ── TICKER ── -->
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span class="ticker-item">Verified Reviews</span>
+    <span class="ticker-item">Real Clients</span>
+    <span class="ticker-item">NYC Based</span>
+    <span class="ticker-item">5 Star Service</span>
+    <span class="ticker-item">Honest Feedback</span>
+    <span class="ticker-item">Verified Reviews</span>
+    <span class="ticker-item">Real Clients</span>
+    <span class="ticker-item">NYC Based</span>
+    <span class="ticker-item">5 Star Service</span>
+    <span class="ticker-item">Honest Feedback</span>
+  </div>
+</div>
+
+<!-- ── REVIEWS ── -->
+<div class="reviews-section">
+  <div class="reviews-header">
+    <div>
+      <p class="section-label">What clients say</p>
+      <h2>Client reviews</h2>
+    </div>
+    <div class="review-count" id="reviewCount"></div>
+  </div>
+  <div class="reviews-grid" id="reviewsGrid"></div>
+  <div class="no-reviews" id="noReviews">No reviews yet — be the first to leave one!</div>
 </div>
 
 <div class="divider"></div>
 
-<!-- SUBMIT FORM -->
-<div class="submit-section">
-  <div class="submit-header">
-    <p class="section-label">Share your experience</p>
-    <h2>Leave a review.</h2>
-    <p>Had work done by Fragmnt? Tell us how it went. All reviews are read before being published.</p>
+<!-- ── LEAVE REVIEW FORM ── -->
+<div class="form-section" id="leave-review">
+  <div class="form-header">
+    <div>
+      <p class="section-label">Share your experience</p>
+      <h2>Leave a<br>review.</h2>
+    </div>
+    <p>Had work done by Fragmnt? Tell us how it went. You can also upload a photo of your build or repair. All reviews are read and approved before being published.</p>
   </div>
 
   <form class="review-form" id="reviewForm" onsubmit="submitReview(event)">
     <input type="hidden" name="_subject" value="New Fragmnt Review Submission">
 
-    <div class="form-row">
-      <div class="form-group">
-        <label>Your name</label>
-        <input type="text" name="name" placeholder="First name + last initial" required>
-      </div>
-      <div class="form-group">
-        <label>Location</label>
-        <input type="text" name="location" placeholder="e.g. Brooklyn, NY">
-      </div>
+    <div class="form-group">
+      <label>Your name</label>
+      <input type="text" name="name" placeholder="First name + last initial" required>
+    </div>
+
+    <div class="form-group">
+      <label>Location</label>
+      <input type="text" name="location" placeholder="e.g. Brooklyn, NY">
     </div>
 
     <div class="form-group">
@@ -346,59 +657,162 @@
       <input type="hidden" name="rating" id="ratingInput" value="">
     </div>
 
-    <div class="form-group">
+    <div class="form-group col-full">
       <label>Your review</label>
-      <textarea name="review" placeholder="Tell us about your experience — what was done, how it went, would you recommend Fragmnt?" required></textarea>
+      <textarea name="review" placeholder="Tell us about your experience — what was done, how it went, and would you recommend Fragmnt?" required></textarea>
     </div>
 
-    <p class="form-note">Reviews are read and approved before being published on the site. Your name and location may be displayed publicly with your review.</p>
+    <div class="form-group col-full">
+      <label>Upload a photo (optional)</label>
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" name="photo" accept="image/*" id="photoInput" onchange="handlePhoto(this)">
+        <div class="upload-icon" id="uploadIcon">📷</div>
+        <div class="upload-text" id="uploadText">
+          <strong>Click to upload</strong> or drag and drop<br>
+          PNG, JPG up to 5MB — show off your build!
+        </div>
+        <img class="upload-preview" id="uploadPreview" alt="Preview">
+      </div>
+    </div>
 
-    <button type="submit" class="submit-btn" id="submitBtn">Submit review</button>
+    <div class="col-full">
+      <p class="form-note">Reviews are approved before being published. Your name and location may appear publicly with your review.</p>
+    </div>
+
+    <div class="col-full">
+      <button type="submit" class="submit-btn" id="submitBtn">Submit review</button>
+    </div>
+
+    <div class="form-success" id="formSuccess">
+      <strong>Review submitted! 🎉</strong>
+      <p>Thanks for sharing your experience. We'll read it and publish it shortly.</p>
+    </div>
   </form>
-
-  <div class="form-success" id="formSuccess">
-    <strong>Review submitted!</strong>
-    Thanks for sharing your experience. We'll review it and publish it shortly.
-  </div>
 </div>
 
 <script>
-// REVIEWS DATA - add approved reviews here
+// REVIEWS DATA
 const REVIEWS = [
   {
     name: "Jordi",
     location: "Queens, NY",
     service: "Repairs & Rebuild",
     rating: 5,
-    text: "Amazing service!! Great deals and made my PC run again perfectly without any crashes and amazing gaming quality."
+    text: "Amazing service!! Great deals and made my PC run again perfectly without any crashes and amazing gaming quality.",
+    photo: null
   }
 ];
 
+// LOAD REVIEWS
 function loadReviews() {
   const grid = document.getElementById('reviewsGrid');
+  const countEl = document.getElementById('reviewCount');
+
   if (!REVIEWS.length) {
     document.getElementById('noReviews').style.display = 'block';
     return;
   }
+
+  countEl.textContent = REVIEWS.length + ' verified review' + (REVIEWS.length !== 1 ? 's' : '');
+
   REVIEWS.forEach((rv, i) => {
     const card = document.createElement('div');
     card.className = 'review-card';
     card.style.transitionDelay = (i * 0.1) + 's';
+
+    const photoHTML = rv.photo
+      ? '<img class="review-photo" src="' + rv.photo + '" alt="Build photo">'
+      : '';
+
     card.innerHTML =
       '<div class="review-stars">' + '<div class="star"></div>'.repeat(rv.rating) + '</div>' +
+      photoHTML +
       '<div class="review-text">' + rv.text + '</div>' +
       '<div class="review-meta"><div>' +
       '<div class="review-name">' + rv.name + '</div>' +
       '<div class="review-location">' + rv.location + '</div>' +
       '</div><div class="review-service-tag">' + rv.service + '</div></div>';
+
     grid.appendChild(card);
   });
+
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in-view'); });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.08 });
   document.querySelectorAll('.review-card').forEach(el => obs.observe(el));
 }
 
+// STAR RATING
+let rating = 0;
+function setRating(val) {
+  rating = val;
+  document.getElementById('ratingInput').value = val;
+  document.querySelectorAll('.star-btn').forEach(btn => {
+    btn.classList.toggle('active', parseInt(btn.dataset.val) <= val);
+  });
+}
+
+// PHOTO PREVIEW
+function handlePhoto(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const zone = document.getElementById('uploadZone');
+  const preview = document.getElementById('uploadPreview');
+  const icon = document.getElementById('uploadIcon');
+  const text = document.getElementById('uploadText');
+
+  zone.classList.add('has-file');
+  icon.style.display = 'none';
+  text.innerHTML = '<strong>' + file.name + '</strong><br><span style="font-size:0.75rem;color:var(--ash-dim)">Click to change</span>';
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// SUBMIT
+async function submitReview(e) {
+  e.preventDefault();
+  if (!rating) { alert('Please select a star rating.'); return; }
+  const form = document.getElementById('reviewForm');
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('https://formspree.io/f/mojzgdbn', {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (res.ok) {
+      form.querySelectorAll('input:not([type=hidden]), textarea, select, button, .upload-zone').forEach(el => el.style.display = 'none');
+      form.querySelectorAll('label, .form-note, .col-full > p').forEach(el => el.style.display = 'none');
+      document.getElementById('formSuccess').style.display = 'block';
+    } else {
+      btn.textContent = 'Something went wrong — try again';
+      btn.disabled = false;
+    }
+  } catch(err) {
+    btn.textContent = 'Network error — try again';
+    btn.disabled = false;
+  }
+}
+
+// SCROLL ANIMATIONS
+function checkAll() {
+  const vh = window.innerHeight;
+  ['.reviews-header', '.form-header', '.review-form'].forEach(sel => {
+    const el = document.querySelector(sel);
+    if (el) { const r = el.getBoundingClientRect(); if (r.top < vh * 0.88) el.classList.add('in-view'); }
+  });
+}
+
+window.addEventListener('scroll', checkAll, { passive: true });
 loadReviews();
 setTimeout(checkAll, 200);
 </script>
