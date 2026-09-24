@@ -142,13 +142,10 @@
   .hero-image-wrap {
     position: relative;
     width: 100%;
-    border-radius: 16px;
-    overflow: hidden;
-    background: #f4f4f2;
     opacity: 0;
     transform: scale(0.96);
     animation: imgReveal 1s cubic-bezier(.2,.7,.3,1) 0.65s forwards;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.6));
   }
 
   @keyframes imgReveal { to { opacity: 1; transform: scale(1); } }
@@ -608,7 +605,6 @@
     .hero { padding: 7.5rem 1.5rem 4rem; }
     .hero-h1.top { margin-bottom: 1rem; }
     .hero-h1.bottom { margin-top: 1rem; margin-bottom: 2rem; }
-    .hero-image-wrap { border-radius: 10px; }
     .hero-bottom { text-align: center; justify-content: center; }
     .hero-bottom > div:first-child { width: 100%; }
     .hero-sub { margin-left: auto; margin-right: auto; }
