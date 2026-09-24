@@ -20,8 +20,8 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    padding: 0 3rem 7rem;
+    justify-content: center;
+    padding: 9rem 3rem 5rem;
     position: relative;
     overflow: hidden;
   }
@@ -85,7 +85,7 @@
   @keyframes wmFade { to { opacity: 0.035; } }
 
   /* Hero content */
-  .hero-content { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; width: 100%; }
+  .hero-content { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; width: 100%; text-align: center; }
 
   .hero-eyebrow {
     font-family: var(--mono);
@@ -93,26 +93,32 @@
     letter-spacing: 0.25em;
     text-transform: uppercase;
     color: var(--ash-dim);
-    margin-bottom: 2rem;
+    margin: 0 auto 2rem;
     opacity: 0;
     transform: translateY(15px);
     animation: riseIn 0.7s cubic-bezier(.2,.7,.3,1) 0.4s forwards;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.75rem;
+    width: fit-content;
   }
 
-  .hero-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--ash-dim); }
+  .hero-eyebrow::before,
+  .hero-eyebrow::after { content: ''; display: block; width: 24px; height: 1px; background: var(--ash-dim); }
 
   /* Word-by-word title animation */
   .hero-h1 {
-    font-size: clamp(3.5rem, 8vw, 8rem);
+    font-size: clamp(2.6rem, 6.5vw, 6rem);
     font-weight: 600;
     letter-spacing: -0.04em;
-    line-height: 0.93;
+    line-height: 0.95;
     color: #fff;
-    margin-bottom: 2.5rem;
+    text-align: center;
   }
+
+  .hero-h1.top { margin-bottom: 1.5rem; }
+  .hero-h1.bottom { margin-top: 1.5rem; margin-bottom: 2.5rem; }
 
   .word-mask {
     display: inline-block;
@@ -129,10 +135,28 @@
 
   .w1 .word-inner { animation-delay: 0.3s; }
   .w2 .word-inner { animation-delay: 0.45s; }
-  .w3 .word-inner { animation-delay: 0.6s; }
-  .w4 .word-inner { animation-delay: 0.75s; color: rgba(255,255,255,0.25); }
-  .w5 .word-inner { animation-delay: 0.9s; }
-  .w6 .word-inner { animation-delay: 1.05s; color: rgba(255,255,255,0.25); }
+  .w3 .word-inner { animation-delay: 1.05s; }
+  .w4 .word-inner { animation-delay: 1.2s; color: rgba(255,255,255,0.25); }
+
+  /* Parts hero image */
+  .hero-image-wrap {
+    position: relative;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #f4f4f2;
+    opacity: 0;
+    transform: scale(0.96);
+    animation: imgReveal 1s cubic-bezier(.2,.7,.3,1) 0.65s forwards;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
+  }
+
+  @keyframes imgReveal { to { opacity: 1; transform: scale(1); } }
+
+  .hero-parts-img {
+    width: 100%;
+    display: block;
+  }
 
   @keyframes wordSlide { to { opacity: 1; transform: translateY(0); } }
   @keyframes riseIn { to { opacity: 1; transform: translateY(0); } }
@@ -143,9 +167,10 @@
     justify-content: space-between;
     gap: 2rem;
     flex-wrap: wrap;
+    text-align: left;
     opacity: 0;
     transform: translateY(20px);
-    animation: riseIn 0.8s cubic-bezier(.2,.7,.3,1) 1.2s forwards;
+    animation: riseIn 0.8s cubic-bezier(.2,.7,.3,1) 1.75s forwards;
   }
 
   .hero-sub {
@@ -580,7 +605,15 @@
 
   /* ── RESPONSIVE ── */
   @media(max-width: 768px) {
-    .hero { padding: 0 1.5rem 5rem; }
+    .hero { padding: 7.5rem 1.5rem 4rem; }
+    .hero-h1.top { margin-bottom: 1rem; }
+    .hero-h1.bottom { margin-top: 1rem; margin-bottom: 2rem; }
+    .hero-image-wrap { border-radius: 10px; }
+    .hero-bottom { text-align: center; justify-content: center; }
+    .hero-bottom > div:first-child { width: 100%; }
+    .hero-sub { margin-left: auto; margin-right: auto; }
+    .hero-actions { justify-content: center; }
+    .hero-live { align-self: center; }
     .hero-scroll-cue { right: 1.5rem; }
     .stats-section { grid-template-columns: repeat(2, 1fr); padding: 3rem 1.5rem; gap: 2rem; }
     .stat-block { padding: 0; border-right: none; }
@@ -605,9 +638,16 @@
   <div class="hero-content">
     <p class="hero-eyebrow">New York City · PC Services</p>
 
-    <h1 class="hero-h1">
+    <h1 class="hero-h1 top">
       <span class="word-mask w1"><span class="word-inner">Built</span></span>&nbsp;
-      <span class="word-mask w2"><span class="word-inner">different.</span></span><br>
+      <span class="word-mask w2"><span class="word-inner">different.</span></span>
+    </h1>
+
+    <div class="hero-image-wrap">
+      <img src="parts-hero.png" class="hero-parts-img" alt="Fragmnt PC building parts — motherboards, GPUs, cases, cooling and components">
+    </div>
+
+    <h1 class="hero-h1 bottom">
       <span class="word-mask w3"><span class="word-inner">Repaired</span></span>&nbsp;
       <span class="word-mask w4"><span class="word-inner">right.</span></span>
     </h1>
